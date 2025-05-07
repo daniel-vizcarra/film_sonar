@@ -10,8 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 0) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_07_213516) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
+  create_table "genres", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "genres_movies", id: false, force: :cascade do |t|
+    t.bigint "genre_id", null: false
+    t.bigint "movie_id", null: false
+    t.index ["genre_id", "movie_id"], name: "index_genres_movies_on_genre_id_and_movie_id"
+    t.index ["movie_id", "genre_id"], name: "index_genres_movies_on_movie_id_and_genre_id"
+  end
+
+  create_table "movies", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.integer "release_year"
+    t.string "poster_url"
+    t.string "director"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 end
