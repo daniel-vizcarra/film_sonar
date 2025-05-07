@@ -1,0 +1,34 @@
+services:
+  app:
+    build:
+      context: . # Directorio donde está el Dockerfile
+      dockerfile: Dockerfile # Usará el Dockerfile que acabamos de definir para desarrollo
+    command: bundle exec rails server -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/rails # Monta el código local en el contenedor para desarrollo en vivo
+      - bundle_cache:/bundle_cache # Persiste el caché de bundler
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      RAILS_ENV: ${RAILS_ENV:-development}
+      DATABASE_HOST: db
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: password
+      # El nombre de la base de datos (film_sonar_development) se toma de database.yml
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      # POSTGRES_DB: film_sonar_dev_init # Opcional, Rails creará las BDs de dev/test
+    ports:
+      - "5432:5432" # Opcional: Mapea el puerto si necesitas acceso externo a la BD
+
+volumes:
+  postgres_data:
+  bundle_cache:
