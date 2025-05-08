@@ -28,3 +28,9 @@ production:
     encoding: unicode
     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
     url: <%= ENV['DATABASE_URL'] %> # Le decimos que use la misma BD que la principal
+
+  queue: # Base de datos para Active Job (Solid Queue) <--- AÑADE ESTO
+    adapter: postgresql
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    url: <%= ENV['DATABASE_URL'] %> # Usa la misma BD también  
