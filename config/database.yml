@@ -15,8 +15,6 @@ test:
   database: film_sonar_test
 
 production:
-  <<: *default
-  # Configuración para producción (usará variables de entorno del hosting)
-  database: film_sonar_production
-  # username: film_sonar # Podrías querer un usuario específico para producción
-  # password: <%= ENV['FILM_SONAR_PROD_DATABASE_PASSWORD'] %>
+  <<: *default # Hereda adapter, encoding, pool
+  # Usa la URL proporcionada por el entorno de hosting
+  url: <%= ENV['DATABASE_URL'] %>

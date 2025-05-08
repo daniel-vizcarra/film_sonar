@@ -24,23 +24,17 @@ RUN apt-get update -qq && \
 # Establecer el directorio de trabajo
 WORKDIR /rails
 
-# Crear directorio bin si no existe
-RUN mkdir -p bin
-
 # Copiar los archivos de gestión de gemas
 COPY Gemfile Gemfile.lock ./
 
 # Instalar gemas incluyendo las de desarrollo
 RUN bundle install --jobs $(nproc) --retry 3 --with development test
 
-# Crear binstubs para las gemas
-RUN bundle binstubs foreman --path bin
-
 # Copiar el resto del código de la aplicación
 COPY . .
 
-# Asegurarse de que el directorio bin existe y tiene los permisos correctos
-RUN chmod +x bin/foreman
+# Asegurarse de que los scripts sean ejecutables
+RUN chmod +x bin/rails
 
 # Exponer el puerto en el que correrá la aplicación Rails
 EXPOSE 3000

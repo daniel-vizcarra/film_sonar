@@ -2,7 +2,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     command: bundle exec foreman start -f Procfile.dev
     volumes:
       - .:/rails
@@ -18,18 +18,7 @@ services:
       DATABASE_PASSWORD: password
       DART_SASS_POLL: "true"
       # El nombre de la base de datos (film_sonar_development) se toma de database.yml
-  web:
-    build: .
-    command: npm start
-    develop:
-      watch:
-        - action: sync
-          path: ./web
-          target: /src/web
-          ignore:
-            - node_modules/
-        - action: rebuild
-          path: package.json
+  
   db:
     image: postgres:15
     volumes:
