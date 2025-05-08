@@ -34,3 +34,9 @@ production:
     encoding: unicode
     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
     url: <%= ENV['DATABASE_URL'] %> # Usa la misma BD también  
+
+  cache: # Base de datos para el Cache (Solid Cache) <--- ¡AÑADE ESTO!
+    adapter: postgresql
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    url: <%= ENV['DATABASE_URL'] %> # Usa la misma BD también  
