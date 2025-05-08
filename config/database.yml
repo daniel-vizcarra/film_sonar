@@ -15,6 +15,16 @@ test:
   database: film_sonar_test
 
 production:
-  <<: *default # Hereda adapter, encoding, pool
-  # Usa la URL proporcionada por el entorno de hosting
-  url: <%= ENV['DATABASE_URL'] %>
+  # Configuración para la base de datos principal de la aplicación
+  primary:
+    adapter: postgresql
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    url: <%= ENV['DATABASE_URL'] %> # Render proporciona esta URL
+
+  # Configuración para la base de datos de Action Cable (Solid Cable)
+  cable:
+    adapter: postgresql
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    url: <%= ENV['DATABASE_URL'] %> # Le decimos que use la misma BD que la principal
