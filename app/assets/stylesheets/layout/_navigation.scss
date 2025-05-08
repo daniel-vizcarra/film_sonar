@@ -18,4 +18,22 @@ header nav ul {
             }
         }
     }
+    // Ejemplo en _navigation.scss o _buttons.scss
+    .button-link-nav {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        color: $header-footer-text; // Usa la variable de color del texto del nav
+        font-weight: bold;
+        font-family: inherit; // Hereda la fuente del nav
+        font-size: inherit; // Hereda el tamaño de fuente
+        cursor: pointer;
+        text-decoration: none;
+    
+        &:hover {
+        color: darken($header-footer-text, 20%);
+        text-decoration: none;
+        }
+    }
 }

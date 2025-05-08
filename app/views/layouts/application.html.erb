@@ -16,6 +16,22 @@
       <nav>
         <ul>
           <li><%= link_to "Inicio", root_path %></li>
+
+          <%# Añadimos lógica condicional para mostrar enlaces de autenticación %>
+          <% if user_signed_in? %>
+            <%# Si el usuario HA iniciado sesión %>
+            <li><span class="nav-user-email">Hola, <%= current_user.email %></span></li>
+            <li><%= link_to "Editar Perfil", edit_user_registration_path %></li>
+            <li>
+              <%= button_to "Cerrar Sesión", destroy_user_session_path, method: :delete, class: "button-link-nav" %>
+              <%# Usamos button_to con method: :delete para logout según convenciones de Rails/Devise/Turbo %>
+            </li>
+          <% else %>
+            <%# Si el usuario NO ha iniciado sesión %>
+            <li><%= link_to "Registrarse", new_user_registration_path %></li>
+            <li><%= link_to "Iniciar Sesión", new_user_session_path %></li>
+          <% end %>
+
         </ul>
       </nav>
     </header>
