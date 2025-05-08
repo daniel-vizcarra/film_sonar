@@ -1,21 +1,16 @@
 # syntax=docker/dockerfile:1
 
-# Usar la misma versión de Ruby que tu proyecto (del .ruby-version o Dockerfile.prod)
-# La variante -slim es más ligera
 FROM ruby:3.3.7-slim
 
 # Variables de entorno para desarrollo
 ENV LANG C.UTF-8
 ENV RAILS_ENV=development
 ENV RACK_ENV=development
-ENV BUNDLE_PATH="/bundle_cache"
-ENV GEM_HOME="/bundle_cache"
-ENV BUNDLE_APP_CONFIG="/bundle_cache"
+ENV BUNDLE_PATH="/usr/local/bundle"
+ENV GEM_HOME="/usr/local/bundle"
+ENV PATH="/usr/local/bundle/bin:${PATH}"
 
 # Instalar dependencias del sistema
-# - build-essential: Para compilar gemas nativas
-# - libpq-dev: Para la gema 'pg' de PostgreSQL
-# - nodejs & yarn: Para el pipeline de assets de Rails o si usas jsbundling-rails
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
     build-essential \
@@ -32,16 +27,14 @@ WORKDIR /rails
 # Copiar los archivos de gestión de gemas
 COPY Gemfile Gemfile.lock ./
 
-# Instalar gemas. Esto se cacheará si Gemfile y Gemfile.lock no cambian.
-# Incluye gemas de desarrollo y prueba.
-RUN bundle install --jobs $(nproc) --retry 3
+# Instalar gemas incluyendo las de desarrollo
+RUN bundle install --jobs $(nproc) --retry 3 --with development test
 
 # Copiar el resto del código de la aplicación
 COPY . .
 
+# Asegurarse de que los scripts sean ejecutables
+RUN chmod +x bin/rails
+
 # Exponer el puerto en el que correrá la aplicación Rails
 EXPOSE 3000
-
-# Comando por defecto para iniciar el servidor de Rails en modo desarrollo
-# -b 0.0.0.0 hace que el servidor sea accesible desde fuera del contenedor
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]

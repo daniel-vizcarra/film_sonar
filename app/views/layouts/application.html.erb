@@ -6,11 +6,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%# stylesheet_link_tag "application" fue reemplazado por la línea de sass de abajo si usas propshaft %>
-    <%# Si usas propshaft (default en Rails 7+ sin webpacker): %>
     <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
-    <%# Si por alguna razón tuvieras una configuración más antigua o con webpacker/jsbundling, la línea podría ser diferente %>
-    <%# pero para una instalación nueva con --css sass, la de arriba debería funcionar con importmaps. %>
     <%= javascript_importmap_tags %>
   </head>
 
@@ -20,20 +16,19 @@
       <nav>
         <ul>
           <li><%= link_to "Inicio", root_path %></li>
-          <%# Aquí irán más enlaces de navegación %>
         </ul>
       </nav>
     </header>
 
     <main>
-      <%# Aquí se mostrarán los mensajes flash (notificaciones) %>
+      <%# Este bloque es para mostrar mensajes flash. Es seguro. %>
       <% flash.each do |type, msg| %>
         <div class="flash_<%= type %>">
           <%= msg %>
         </div>
       <% end %>
 
-      <%= yield %> <%# El contenido de cada página específica se inserta aquí %>
+      <%= yield %>
     </main>
 
     <footer>

@@ -1,1 +1,13 @@
-// Sassy
+/* app/assets/stylesheets/application.scss */
+
+// Base styles (Descomenta estas líneas)
+@import "base/variables";
+@import "base/typography";
+
+// Layout styles (Descomenta estas líneas)
+@import "layout/layout";
+@import "layout/header";
+@import "layout/navigation";
+@import "layout/footer";
+
+// ... (Futuras importaciones) ...

@@ -1,0 +1,10 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; // Asegura que el body ocupe al menos toda la altura de la ventana
+}
+
+main {
+    flex-grow: 1; // Permite que el contenido principal crezca y empuje el footer hacia abajo
+    padding: $spacing-unit * 1.5 $spacing-unit; // Algo de padding vertical y horizontal
+}

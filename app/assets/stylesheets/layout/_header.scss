@@ -1,0 +1,11 @@
+header {
+    background-color: $header-footer-bg;
+    color: $header-footer-text;
+    padding: $spacing-unit $spacing-unit * 2; // Padding arriba/abajo y a los lados
+    text-align: center;
+
+    h1 {
+        color: $header-footer-text; // Aseguramos que el h1 dentro del header sea claro
+        margin-bottom: $spacing-unit / 2;
+    }
+}

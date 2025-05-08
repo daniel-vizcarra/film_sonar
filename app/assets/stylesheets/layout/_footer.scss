@@ -1,0 +1,11 @@
+footer {
+    background-color: $header-footer-bg;
+    color: $header-footer-text;
+    padding: $spacing-unit * 1.5 $spacing-unit * 2;
+    text-align: center;
+    font-size: $font-size-base * 0.9; // Un poco más pequeño
+
+    p {
+      margin: 0; // Quita el margen del párrafo dentro del footer
+    }
+}
