@@ -1,0 +1,80 @@
+// app/assets/stylesheets/components/_movie_card.scss
+
+.movie-list {
+    display: grid;
+    // Usamos repeat con auto-fill para que sea responsivo.
+    // minmax define el tamaño mínimo y máximo de cada tarjeta.
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: $spacing-unit * 1.5; // Espacio entre tarjetas, usando nuestra variable
+    padding-top: $spacing-unit;
+  }
+  
+  .movie-card {
+    border: 1px solid lighten($secondary-color, 50%); // Un borde más suave
+    padding: $spacing-unit;
+    border-radius: 8px; // Bordes un poco más redondeados
+    background-color: #ffffff; // Fondo blanco para la tarjeta
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // Una sombra sutil para darle profundidad
+    display: flex;
+    flex-direction: column; // Para alinear el contenido verticalmente
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; // Transición suave
+  
+    &:hover {
+      transform: translateY(-5px); // Efecto ligero al pasar el mouse
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+  
+    h2 {
+      margin-top: 0;
+      font-size: $font-size-base * 1.35; // ej. ~21px
+      margin-bottom: $spacing-unit / 2;
+      color: $primary-color;
+  
+      a {
+        color: inherit; // Hereda el color del h2
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  
+    .movie-poster-thumbnail {
+        width: 100%;
+        aspect-ratio: 2 / 3; // Define la relación de aspecto
+        object-fit: cover;   // o 'contain' si prefieres no cortar pero tener barras
+        background-color: $body-bg;
+        border-radius: 4px;
+        margin-bottom: $spacing-unit * 0.75;
+    }
+  
+    p {
+      font-size: $font-size-base * 0.9;
+      line-height: 1.4;
+      margin-bottom: $spacing-unit / 2;
+      flex-grow: 1; // Permite que la descripción ocupe espacio disponible
+    }
+  
+    .movie-genres {
+      color: $secondary-color;
+      font-style: italic;
+      font-size: $font-size-base * 0.85;
+      margin-bottom: $spacing-unit;
+    }
+  
+    .button, a.button { // Estilo para el botón "Ver Detalles" dentro de la tarjeta
+      margin-top: auto; // Empuja el botón al final de la tarjeta
+      align-self: flex-start; // Lo alinea a la izquierda si el contenedor es flex
+      // Heredará estilos de .button que ya definimos en _buttons.scss
+    }
+  }
+  
+  // Estilo para el póster en la página de detalle de la película (show)
+  .movie-poster-large {
+    max-width: 350px; // O el tamaño que prefieras
+    height: auto;
+    margin-bottom: $spacing-unit * 1.5;
+    border-radius: 6px;
+    display: block; // Para poder usar margin: auto si quisieras centrarlo
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  }

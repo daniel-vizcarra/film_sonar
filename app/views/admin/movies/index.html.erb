@@ -1,14 +1,11 @@
 <%# app/views/admin/movies/index.html.erb %>
 <h1>Administración de Películas</h1>
-
-<p>
-  <%= link_to "Añadir Nueva Película", new_admin_movie_path, class: "button" %>
-</p>
-
+<p><%= link_to "Añadir Nueva Película", new_admin_movie_path, class: "button" %></p>
 <% if @movies.any? %>
   <table>
     <thead>
       <tr>
+        <th>Póster</th> <%# <--- NUEVA COLUMNA %>
         <th>Título</th>
         <th>Año</th>
         <th>Director</th>
@@ -18,13 +15,21 @@
     <tbody>
       <% @movies.each do |movie| %>
         <tr>
+          <td>
+            <%# --- AÑADIR IMAGEN AQUÍ --- %>
+            <% if movie.poster_url.present? %>
+              <%= image_tag movie.poster_url, alt: movie.title, style: "width: 50px; height: auto; border-radius: 3px;" %>
+            <% else %>
+              <small>N/A</small>
+            <% end %>
+          </td>
           <td><%= link_to movie.title, admin_movie_path(movie) %></td>
           <td><%= movie.release_year %></td>
           <td><%= movie.director %></td>
           <td>
             <%= link_to "Ver", admin_movie_path(movie) %> |
             <%= link_to "Editar", edit_admin_movie_path(movie) %> |
-            <%= button_to "Eliminar", admin_movie_path(movie), method: :delete, data: { turbo_confirm: '¿Estás seguro?' } %>
+            <%= button_to "Eliminar", admin_movie_path(movie), method: :delete, data: { turbo_confirm: '¿Estás seguro?' }, class: "button-link-inline" %>
           </td>
         </tr>
       <% end %>
