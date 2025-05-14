@@ -1,0 +1,35 @@
+<%# app/views/admin/movies/index.html.erb %>
+<h1>Administración de Películas</h1>
+
+<p>
+  <%= link_to "Añadir Nueva Película", new_admin_movie_path, class: "button" %>
+</p>
+
+<% if @movies.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Año</th>
+        <th>Director</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @movies.each do |movie| %>
+        <tr>
+          <td><%= link_to movie.title, admin_movie_path(movie) %></td>
+          <td><%= movie.release_year %></td>
+          <td><%= movie.director %></td>
+          <td>
+            <%= link_to "Ver", admin_movie_path(movie) %> |
+            <%= link_to "Editar", edit_admin_movie_path(movie) %> |
+            <%= button_to "Eliminar", admin_movie_path(movie), method: :delete, data: { turbo_confirm: '¿Estás seguro?' } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>Aún no hay películas en el catálogo. ¡Añade la primera!</p>
+<% end %>
