@@ -1,0 +1,8 @@
+<%# app/views/admin/movies/edit.html.erb %>
+<h1>Editar Película: <%= @movie.title %></h1>
+
+<%= render 'form' %> <%# Reutilizamos el mismo formulario que para 'new' %>
+
+<br>
+<%= link_to 'Ver detalles', admin_movie_path(@movie) %> |
+<%= link_to 'Volver al listado', admin_movies_path %>

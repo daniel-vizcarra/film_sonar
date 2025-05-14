@@ -1,0 +1,38 @@
+// app/assets/stylesheets/components/_buttons.scss
+
+// Para botones que deben parecer enlaces, especialmente si son <button>
+.button-link-inline {
+    background: none !important; // !important para asegurar que sobreescriba estilos de botón por defecto
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 0 0 0.5em; // Un pequeño margen a la izquierda si está junto a otro elemento
+    color: $link-color;    // Usamos la variable definida en _variables.scss
+    font: inherit;         // Hereda la fuente del elemento padre
+    text-decoration: underline;
+    cursor: pointer;
+    display: inline;       // Para que fluya como un enlace
+  
+    &:hover {
+      color: $link-hover-color; // Usamos la variable definida en _variables.scss
+    }
+  }
+  
+  // Estilo general para botones principales de la aplicación
+  .button {
+    display: inline-block;
+    padding: 0.6em 1.2em;
+    background-color: $primary-color; // Variable de _variables.scss
+    color: white;                     // Texto blanco para contraste
+    border: none;
+    border-radius: 4px;               // Bordes redondeados sutiles
+    text-decoration: none;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+  
+    &:hover {
+      background-color: darken($primary-color, 10%); // Oscurece un poco al pasar el mouse
+      color: white;
+      text-decoration: none;
+    }
+  }

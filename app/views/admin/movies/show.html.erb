@@ -17,4 +17,5 @@
 
 <br>
 <%= link_to 'Editar', edit_admin_movie_path(@movie) %> |
+<%= button_to "Eliminar", admin_movie_path(@movie), method: :delete, data: { turbo_confirm: '¿Estás seguro?' }, class: "button-link-inline" %> | <%# AÑADIDO %>
 <%= link_to 'Volver al listado', admin_movies_path %>
