@@ -1,0 +1,58 @@
+<%# app/views/admin/movies/_form.html.erb %>
+
+<%= form_with(model: [:admin, @movie], local: true) do |form| %>
+  <%# Mostrar errores de validación %>
+  <% if @movie.errors.any? %>
+    <div style="color: red;">
+      <h2><%= pluralize(@movie.errors.count, "error") %> impidieron guardar esta película:</h2>
+      <ul>
+        <% @movie.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :title, "Título" %><br>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :description, "Descripción" %><br>
+    <%= form.text_area :description, rows: 5 %>
+  </div>
+
+  <div>
+    <%= form.label :release_year, "Año de Lanzamiento" %><br>
+    <%= form.number_field :release_year %>
+  </div>
+
+  <div>
+    <%= form.label :director, "Director/a" %><br>
+    <%= form.text_field :director %>
+  </div>
+
+  <div>
+    <%= form.label :poster_url, "URL del Póster" %><br>
+    <%= form.text_field :poster_url %>
+  </div>
+
+  <div>
+    <strong><%= form.label :genre_ids, "Géneros" %></strong><br>
+    <%# collection_check_boxes para seleccionar múltiples géneros %>
+    <div class="genre-checkboxes">
+      <%= form.collection_check_boxes :genre_ids, Genre.all.order(:name), :id, :name do |b| %>
+        <div class="genre-option">
+          <%= b.check_box %>
+          <%= b.label %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <br>
+  <div>
+    <%= form.submit "Guardar Película", class: "button" %>
+  </div>
+<% end %>

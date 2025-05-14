@@ -1,0 +1,20 @@
+<%# app/views/admin/movies/show.html.erb %>
+<h1><%= @movie.title %></h1>
+
+<p><strong>Descripción:</strong> <%= @movie.description %></p>
+<p><strong>Año:</strong> <%= @movie.release_year %></p>
+<p><strong>Director:</strong> <%= @movie.director %></p>
+<p><strong>URL Póster:</strong> <%= @movie.poster_url %></p>
+
+<p>
+  <strong>Géneros:</strong>
+  <% if @movie.genres.any? %>
+    <%= @movie.genres.map(&:name).join(', ') %>
+  <% else %>
+    Ninguno asignado.
+  <% end %>
+</p>
+
+<br>
+<%= link_to 'Editar', edit_admin_movie_path(@movie) %> |
+<%= link_to 'Volver al listado', admin_movies_path %>
