@@ -59,7 +59,7 @@ module Admin
           :title,
           :description,
           :release_year,
-          :director,
+          :director_id,
           :poster_url,
           genre_ids: [] # Importante para permitir la asignación de múltiples géneros
         )

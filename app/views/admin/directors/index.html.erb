@@ -1,0 +1,33 @@
+<%# app/views/admin/directors/index.html.erb %>
+<h1>Gestión de Directores</h1>
+
+<p>
+  <%= link_to "Añadir Nuevo Director", new_admin_director_path, class: "button" %>
+</p>
+
+<% if @directors.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @directors.each do |director| %>
+        <tr>
+          <td><%= director.name %></td>
+          <td>
+            <%# Podríamos añadir un link_to admin_director_path(director) si creamos la vista show %>
+            <%= link_to "Editar", edit_admin_director_path(director) %> |
+            <%= button_to "Eliminar", admin_director_path(director), method: :delete, data: { turbo_confirm: '¿Estás seguro?' }, class: "button-link-inline" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No hay directores en la base de datos. ¡Añade el primero!</p>
+<% end %>
+<br>
+<%= link_to "Volver a Admin Películas", admin_movies_path %>

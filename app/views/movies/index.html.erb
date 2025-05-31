@@ -99,7 +99,7 @@
 
         <%# Mostrar el director si está presente %>
         <% if movie.director.present? %>
-          <p class="movie-card-director"><%= movie.director %></p>
+          <p class="movie-card-director"><%= movie.director&.name %></p>
         <% end %>
 
         <%# Los géneros pueden seguir ocultos en la tarjeta para mantenerla limpia %>

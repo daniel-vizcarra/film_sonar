@@ -4,7 +4,7 @@
 <%= image_tag @movie.poster_url, alt: @movie.title, class: "movie-poster-large" if @movie.poster_url.present? %>
 <br>
 
-<p><strong>Director/a:</strong> <%= @movie.director %></p>
+<p><strong>Director/a:</strong> <%= @movie.director&.name %></p>
 
 <% if @movie.genres.any? %>
   <p><strong>Géneros:</strong> <%= @movie.genres.map(&:name).join(', ') %></p>

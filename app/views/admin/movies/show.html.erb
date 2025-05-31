@@ -8,7 +8,7 @@
 
 <p><strong>Descripción:</strong> <%= @movie.description %></p>
 <p><strong>Año:</strong> <%= @movie.release_year %></p>
-<p><strong>Director:</strong> <%= @movie.director %></p>
+<p><strong>Director:</strong> <%= @movie.director&.name %></p>
 <p><strong>URL Póster:</strong> <%= @movie.poster_url %></p>
 
 <p>

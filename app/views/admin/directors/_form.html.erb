@@ -1,0 +1,33 @@
+<%# app/views/admin/directors/_form.html.erb %>
+<%= form_with(model: [:admin, @director], local: true) do |form| %>
+  <% if @director.errors.any? %>
+    <div style="color: red;">
+      <h2><%= pluralize(@director.errors.count, "error") %> impidieron guardar este director:</h2>
+      <ul>
+        <% @director.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, "Nombre Completo" %><br>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :bio, "Biografía" %><br>
+    <%= form.text_area :bio, rows: 5 %>
+  </div>
+
+  <div>
+    <%= form.label :photo_url, "URL de la Foto" %><br>
+    <%= form.text_field :photo_url %>
+  </div>
+
+  <br>
+  <div>
+    <%= form.submit "Guardar Director", class: "button" %>
+  </div>
+<% end %>

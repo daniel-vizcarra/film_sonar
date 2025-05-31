@@ -1,0 +1,9 @@
+<%# app/views/admin/directors/show.html.erb %>
+<h1><%= @director.name %></h1>
+<p><strong>Biografía:</strong> <%= simple_format(@director.bio) %></p>
+<% if @director.photo_url.present? %>
+  <p><strong>Foto:</strong><br><%= image_tag @director.photo_url, alt: @director.name, style: "max-width: 200px; height: auto;" %></p>
+<% end %>
+<br>
+<%= link_to 'Editar Director', edit_admin_director_path(@director) %> |
+<%= link_to 'Volver al listado de Directores', admin_directors_path %>

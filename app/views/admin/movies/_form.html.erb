@@ -29,8 +29,10 @@
   </div>
 
   <div>
-    <%= form.label :director, "Director/a" %><br>
-    <%= form.text_field :director %>
+  <%= form.label :director_id, "Director/a" %><br>
+  <%# Menú desplegable para seleccionar un director existente %>
+  <%= form.collection_select :director_id, Director.all.order(:name), :id, :name, { include_blank: 'Seleccionar un Director...' }, { class: 'form-control' } %>
+  <%# Podríamos añadir un enlace "o añadir nuevo" aquí en el futuro %>
   </div>
 
   <div>
