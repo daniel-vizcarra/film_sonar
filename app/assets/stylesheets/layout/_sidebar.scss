@@ -1,0 +1,119 @@
+// app/assets/stylesheets/layout/_sidebar.scss
+
+.filter-sidebar {
+    position: fixed; // Se queda fijo en la pantalla
+    top: 0;
+    left: 0;
+    width: 300px; // Ancho del sidebar, ajústalo
+    max-width: 80%; // Máximo ancho en pantallas pequeñas
+    height: 100%;
+    background-color: #fff; // Fondo blanco
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    transform: translateX(-105%); // Inicialmente oculto fuera de la pantalla a la izquierda
+    transition: transform 0.3s ease-in-out; // Transición suave para el deslizamiento
+    z-index: 1050; // Asegura que esté por encima de otros contenidos
+    overflow-y: auto; // Scroll si el contenido es muy largo
+    display: flex;
+    flex-direction: column;
+  
+    &.is-open {
+      transform: translateX(0); // Se desliza a la vista
+    }
+  }
+  
+  .filter-sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-unit;
+    border-bottom: 1px solid #e0e0e0;
+  
+    h3 {
+      margin: 0;
+      font-size: $font-size-base * 1.25;
+    }
+  }
+  
+  .close-sidebar-button {
+    background: none;
+    border: none;
+    font-size: $font-size-base * 1.8;
+    cursor: pointer;
+    padding: 0 $spacing-unit / 2;
+    line-height: 1;
+    color: $secondary-color;
+  
+    &:hover {
+      color: $text-color;
+    }
+  }
+  
+  .filter-sidebar-content {
+    padding: $spacing-unit;
+    flex-grow: 1;
+  
+    .filter-section {
+      margin-bottom: $spacing-unit * 1.5;
+      h4 {
+        font-size: $font-size-base * 1.1;
+        margin-bottom: $spacing-unit / 2;
+        color: $text-color;
+        border-bottom: 1px solid #eee;
+        padding-bottom: $spacing-unit / 3;
+      }
+    }
+  
+    .filter-options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); // Crea 2 columnas
+      gap: $spacing-unit / 2; // Espacio entre checkboxes
+  
+      // Si quieres 3 columnas y tienes suficiente espacio:
+      // grid-template-columns: repeat(3, 1fr);
+    }
+  
+    .filter-option {
+      display: flex; // Para alinear checkbox y label
+      align-items: center;
+      margin-bottom: $spacing-unit / 3;
+  
+      input[type="checkbox"] {
+        margin-right: $spacing-unit / 2;
+        accent-color: $primary-color; // Colorea el check del checkbox
+      }
+  
+      label {
+        font-size: $font-size-base * 0.9;
+        cursor: pointer;
+      }
+    }
+    // Quita los estilos anteriores de .genre-filters-in-sidebar a (enlaces)
+    // o renómbralo y adáptalo si es necesario.
+  }
+  
+  .filter-sidebar-actions {
+    padding: $spacing-unit;
+    border-top: 1px solid #e0e0e0;
+    background-color: #f8f9fa; // Un fondo ligeramente diferente para las acciones
+    display: flex;
+    justify-content: flex-end; // Alinea los botones a la derecha
+  }
+  
+  // Overlay para el fondo
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5); // Negro semitransparente
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    z-index: 1040; // Detrás del sidebar pero encima del contenido
+  
+    &.is-visible {
+      opacity: 1;
+      visibility: visible;
+    }
+  }

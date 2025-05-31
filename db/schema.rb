@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_14_001100) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_31_181206) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "directors", force: :cascade do |t|
+    t.string "name"
+    t.text "bio"
+    t.string "photo_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "genres", force: :cascade do |t|
     t.string "name"
@@ -32,9 +40,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_14_001100) do
     t.text "description"
     t.integer "release_year"
     t.string "poster_url"
-    t.string "director"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "director_id"
+    t.index ["director_id"], name: "index_movies_on_director_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -49,4 +58,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_14_001100) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "movies", "directors"
 end

@@ -9,7 +9,9 @@
 @import "layout/header";
 @import "layout/navigation";
 @import "layout/footer";
-
+@import "layout/sidebar";
 // Component styles
 @import "components/buttons";
 @import "components/movie_card";
+@import "components/forms";
+@import "components/filters";
