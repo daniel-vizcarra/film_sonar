@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  movie: one
+  source_name: MyString
+  score: MyString
+  vote_count: 1
+
+two:
+  movie: two
+  source_name: MyString
+  score: MyString
+  vote_count: 1
