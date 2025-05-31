@@ -40,6 +40,33 @@
     <%= form.text_field :poster_url %>
   </div>
 
+  <fieldset style="margin-top: 20px; border: 1px solid #ccc; padding: 10px;">
+  <legend style="font-size: 1.1em; font-weight: bold; margin-bottom: 10px;">Calificaciones Externas</legend>
+  <%# Modifica esta línea para usar @ordered_external_ratings %>
+  <%= form.fields_for :external_ratings, @ordered_external_ratings do |rating_form| %>
+    <div class="external-rating-fields" style="border-bottom: 1px dashed #eee; padding-bottom: 10px; margin-bottom: 10px;">
+      <h4><%= rating_form.object.source_name %></h4> <%# Ya no necesitamos "|| Nueva Calificación" %>
+      <%= rating_form.hidden_field :source_name %>
+
+      <div>
+        <%= rating_form.label :score, "Puntaje (ej: 4.5/5, 92%, 8.7/10)" %><br>
+        <%= rating_form.text_field :score %>
+      </div>
+      <div>
+        <%= rating_form.label :vote_count, "Cantidad de Votos" %><br>
+        <%= rating_form.number_field :vote_count %>
+      </div>
+
+      <% if rating_form.object.persisted? %>
+        <div style="margin-top: 5px;">
+          <%= rating_form.check_box :_destroy %>
+          <%= rating_form.label :_destroy, "Eliminar esta calificación" %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  </fieldset>
+
   <div>
     <strong><%= form.label :genre_ids, "Géneros" %></strong><br>
     <%# collection_check_boxes para seleccionar múltiples géneros %>

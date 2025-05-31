@@ -17,6 +17,11 @@ module Admin
       # GET /admin/movies/new
       def new
         @movie = Movie.new
+        # Preparamos una lista ordenada de external_ratings para el formulario
+        @ordered_external_ratings = ExternalRating::SOURCES.map do |source_name|
+          # Construimos un nuevo objeto ExternalRating para cada fuente
+          @movie.external_ratings.build(source_name: source_name)
+        end
       end
   
       # POST /admin/movies
@@ -32,6 +37,16 @@ module Admin
       # GET /admin/movies/:id/edit
       def edit
         @movie = Movie.find(params[:id])
+      
+        # Obtenemos los ratings existentes y los mapeamos por nombre de fuente para fácil acceso
+        existing_ratings_by_source = @movie.external_ratings.index_by(&:source_name)
+      
+        # Preparamos una lista ordenada de external_ratings para el formulario
+        # Para cada fuente en ExternalRating::SOURCES, usamos el rating existente si hay,
+        # o construimos uno nuevo si no existe.
+        @ordered_external_ratings = ExternalRating::SOURCES.map do |source_name|
+          existing_ratings_by_source[source_name] || @movie.external_ratings.build(source_name: source_name)
+        end
       end
   
       # PATCH/PUT /admin/movies/:id
@@ -61,7 +76,9 @@ module Admin
           :release_year,
           :director_id,
           :poster_url,
-          genre_ids: [] # Importante para permitir la asignación de múltiples géneros
+          genre_ids: [], # Importante para permitir la asignación de múltiples géneros
+          external_ratings_attributes: [:id, :source_name, :score, :vote_count, :_destroy] 
+
         )
       end
     end
