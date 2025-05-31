@@ -11,6 +11,13 @@
 <p><strong>Director:</strong> <%= @movie.director&.name %></p>
 <p><strong>URL Póster:</strong> <%= @movie.poster_url %></p>
 
+<%# Mostrar Puntaje Ponderado %>
+<% if @movie.weighted_score.present? %>
+  <p><strong>Puntaje Ponderado FilmSonar:</strong> <%= "%.1f" % @movie.weighted_score %>/100</p>
+<% else %>
+  <p><strong>Puntaje Ponderado FilmSonar:</strong> N/A</p>
+<% end %>
+
 <p>
   <strong>Géneros:</strong>
   <% if @movie.genres.any? %>

@@ -35,7 +35,9 @@
                           ["Título (A-Z)", "title_asc"],
                           ["Título (Z-A)", "title_desc"],
                           ["Director (A-Z)", "director_asc"],
-                          ["Director (Z-A)", "director_desc"]
+                          ["Director (Z-A)", "director_desc"],
+                          ["Mejor Puntaje FilmSonar", "score_desc"], 
+                          ["Peor Puntaje FilmSonar", "score_asc"]   
                         ], params[:sort_by] || "release_year_desc"),
                         {},
                         { onchange: "this.form.submit();", class: "sort-select" } %>
@@ -123,6 +125,13 @@
 
         <% if movie.director&.name.present? %>
           <p class="movie-card-director"><strong>Dir:</strong> <%= movie.director.name %></p>
+        <% end %>
+
+        <%# Mostrar Puntaje Ponderado en la tarjeta %>
+        <% if movie.weighted_score.present? %>
+          <p class="movie-card-score">
+            <strong>Puntaje:</strong> <%= "%.1f" % movie.weighted_score %>/100
+          </p>
         <% end %>
       </div>
     <% end %>

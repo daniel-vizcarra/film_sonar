@@ -10,6 +10,26 @@
   <p><strong>Géneros:</strong> <%= @movie.genres.map(&:name).join(', ') %></p>
 <% end %>
 
+<%# Mostrar Puntaje Ponderado %>
+<% if @movie.weighted_score.present? %>
+  <p><strong>Puntaje FilmSonar:</strong> <span style="font-size: 1.2em; font-weight: bold;"><%= "%.1f" % @movie.weighted_score %></span>/100</p>
+<% end %>
+
+<%# Mostrar Calificaciones Externas Individuales %>
+<% if @movie.external_ratings.any? %>
+  <h4>Calificaciones Externas:</h4>
+  <ul>
+    <% @movie.external_ratings.order(:source_name).each do |rating| %>
+      <li>
+        <strong><%= rating.source_name %>:</strong> <%= rating.score %>
+        <% if rating.vote_count.present? %>
+          <small>(de <%= number_with_delimiter(rating.vote_count) %> votos)</small>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
 <p><strong>Descripción:</strong></p>
 <p><%= simple_format(@movie.description) %></p> <%# simple_format ayuda a mantener saltos de línea %>
 

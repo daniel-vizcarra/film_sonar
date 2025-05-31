@@ -32,6 +32,15 @@
           <td><%= link_to movie.title, admin_movie_path(movie) %></td>
           <td><%= movie.release_year %></td>
           <td><%= movie.director&.name %></td>
+
+          <td> <%# <--- NUEVA CELDA %>
+            <% if movie.weighted_score.present? %>
+              <%= "%.1f" % movie.weighted_score %>
+            <% else %>
+              N/A
+            <% end %>
+          </td>
+          
           <td>
             <%= link_to "Ver", admin_movie_path(movie) %> |
             <%= link_to "Editar", edit_admin_movie_path(movie) %> |

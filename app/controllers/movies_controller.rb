@@ -54,6 +54,10 @@ class MoviesController < ApplicationController
       movies_query = movies_query.joins(:director)
                                 .select("movies.*, LOWER(directors.name) as director_name")
                                 .order("director_name DESC, movies.title ASC")
+    when "score_desc"
+      movies_query = movies_query.order(weighted_score: :desc, title: :asc)
+    when "score_asc"
+      movies_query = movies_query.order(weighted_score: :asc, title: :asc)
     else
       movies_query = movies_query.order(release_year: :desc, title: :asc)
     end

@@ -60,6 +60,13 @@
   .button {
     display: none;
   }
+
+  .movie-card-score {
+    font-weight: bold;
+    color: $primary-color; // O el color que prefieras
+    font-size: $font-size-base * 0.9;
+    margin-top: $spacing-unit / 2;
+  }
 }
 
 // Los estilos para .movie-poster-large (en la página de show) pueden quedarse como estaban o ajustarse:
