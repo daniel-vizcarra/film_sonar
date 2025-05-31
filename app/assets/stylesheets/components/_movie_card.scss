@@ -1,77 +1,170 @@
 // app/assets/stylesheets/components/_movie_card.scss
 
+// --- Estilos para la lista de películas (cuadrícula) ---
 .movie-list {
   display: grid;
-  // Ajusta minmax para controlar cuántas tarjetas caben. 200px es un buen punto de partida.
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: $spacing-unit * 1.8; // Un poco más de espacio entre tarjetas
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); // Ajusta minmax según el tamaño deseado de tarjeta
+  gap: $spacing-unit * 1.8;
   padding: $spacing-unit;
 }
 
+// --- Estilos para cada tarjeta de película ---
 .movie-card {
-  background-color: transparent; // Sin fondo de tarjeta, el fondo de la página se ve
-  border: none;                // Sin bordes en la tarjeta
-  box-shadow: none;            // Sin sombra en la tarjeta, para un look más plano en la cuadrícula
-  text-align: left;            // Alineación de texto para el título
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
 
-  // Hacemos que toda la tarjeta (o la parte que definamos en el HTML) sea un enlace
-  a, a:hover, a:visited {
-    text-decoration: none;
-    color: inherit; // Hereda el color del texto para los enlaces dentro de la tarjeta
+  // Contenedor para el póster y la capa de acciones (overlay)
+  // Este necesita position: relative para que el overlay se posicione correctamente dentro de él.
+  .movie-poster-container {
+    position: relative;
+    display: block; // O inline-block, dependiendo de cómo quieras que se comporte
+    cursor: default; // El cursor será pointer en los elementos clickeables dentro
+
+    &:hover {
+      .movie-card-actions-overlay {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0); // Hace que el overlay aparezca (suba)
+      }
+    }
   }
 
   .movie-poster-thumbnail {
     width: 100%;
-    aspect-ratio: 2 / 3; // Proporción 2:3 (ancho:alto) para pósters de película
-    object-fit: cover;     // Asegura que la imagen cubra el área, puede cortar
-    // object-fit: contain; // Alternativa: muestra la imagen completa, puede dejar espacios
-    background-color: lighten($secondary-color, 35%); // Un color de fondo muy suave si no hay imagen
-    border-radius: 3px; // Bordes ligeramente redondeados para el póster
-    margin-bottom: $spacing-unit / 2; // Espacio entre póster y título
-    display: block; // Importante para que aspect-ratio funcione bien
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); // Sombra sutil solo en el póster
+    aspect-ratio: 2 / 3; // Proporción 2:3 (ancho:alto)
+    object-fit: cover;
+    background-color: $light-gray; // Color de fondo si la imagen no carga (asegúrate que $light-gray esté definido en _variables.scss)
+    border-radius: 3px;
+    display: block; // Importante para aspect-ratio y layout
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); // Sombra sutil en el póster
   }
 
-  h2 { // Para el título de la película
-    font-size: $font-size-base * 0.95; // Título un poco más pequeño
-    font-weight: 500;                  // Peso de fuente normal o semi-bold
+  // Placeholder para cuando no hay imagen de póster
+  .movie-poster-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: $spacing-unit / 2;
+    box-sizing: border-box; // Para que el padding no aumente el tamaño
+    span {
+      font-size: $font-size-base * 0.9;
+      color: $secondary-color;
+    }
+  }
+
+  // Capa de acciones que aparece al pasar el cursor sobre .movie-poster-container
+  .movie-card-actions-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0; // o width: 100%;
+    background: rgba(10, 20, 30, 0.85); // Fondo oscuro semitransparente
+    padding: $spacing-unit / 1.5 $spacing-unit / 2; // Padding reducido para la barra
+    display: flex;
+    justify-content: space-around; // Distribuye los iconos equitativamente
+    align-items: center;
+    opacity: 0; // Oculto por defecto
+    visibility: hidden;
+    transform: translateY(25%); // Empieza ligeramente abajo, para efecto de subida
+    transition: opacity 0.25s ease-out, visibility 0.25s ease-out, transform 0.25s ease-out;
+    z-index: 2; // Para que esté por encima del póster
+    border-bottom-left-radius: 3px; // Para que coincida con el póster
+    border-bottom-right-radius: 3px;
+
+    .action-icon {
+      background: none;
+      border: none;
+      padding: $spacing-unit / 3; // Espacio alrededor del SVG
+      margin: 0 $spacing-unit / 4;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.7); // Color base del icono (outline blanco semitransparente)
+      line-height: 0; // Para que el button_to no añada altura extra
+
+      svg {
+        width: 22px; // Ajusta el tamaño de los iconos
+        height: 22px;
+        display: block;
+        transition: transform 0.15s ease-out, color 0.15s ease-out;
+      }
+
+      &:hover {
+        color: #fff; // Blanco completo al pasar el cursor
+        transform: scale(1.15); // Efecto de zoom ligero
+      }
+
+      // Estados activos (cuando la acción se ha realizado)
+      &.watched-true { color: #44dd44; } // Verde brillante para "visto"
+      &.liked-true { color: #ff6b6b; }   // Rojo/Rosa para "like"
+      &.watchlist-true { color: #4dabf7; } // Azul para "en watchlist"
+
+      // Para que el interior del SVG tome el color cuando está activo
+      &.watched-true svg,
+      &.liked-true svg,
+      &.watchlist-true svg {
+        fill: currentColor; // El SVG usa el color del botón
+        stroke-width: 1;    // Puedes ajustar el grosor del borde si es necesario
+      }
+    }
+  }
+
+  // Contenedor para el contenido textual debajo del póster
+  .movie-card-content {
+    margin-top: $spacing-unit / 1.5;
+    padding: 0 $spacing-unit / 4; // Un poco de padding si es necesario
+
+    a, a:hover, a:visited { // Estilos para el enlace del título/director
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+
+  h2 { // Título de la película
+    font-size: $font-size-base * 0.9;
+    font-weight: 600; // Un poco más de peso para el título
     color: $text-color;
     margin-top: 0;
-    margin-bottom: $spacing-unit / 3;
+    margin-bottom: $spacing-unit / 4; // Menos espacio si el director va debajo
     line-height: 1.3;
+    // Para truncar texto (opcional)
+    // white-space: nowrap;
+    // overflow: hidden;
+    // text-overflow: ellipsis;
   }
 
-  // Ocultaremos director y géneros en la vista de lista para un look más limpio.
-  // Esta información estará en la página de detalle.
   .movie-card-director {
-    display: block; // Aseguramos que sea visible
-    font-size: $font-size-base * 0.85; // Un poco más pequeño
-    color: $secondary-color;           // Usamos el color secundario o un gris
-    margin-top: $spacing-unit / 4;   // Margen superior pequeño
-    margin-bottom: $spacing-unit / 3;
-    line-height: 1.3;
-    font-style: italic; // Opcional: para diferenciarlo un poco
-  }
-  .movie-card-genres {
-    display: none;
-  }
-
-  // También ocultamos el botón "Ver Detalles" explícito, ya que el póster/título serán el enlace.
-  .button {
-    display: none;
+    display: block;
+    font-size: $font-size-base * 0.75; // Más pequeño
+    color: $secondary-color;
+    margin-top: 0;
+    margin-bottom: $spacing-unit / 2;
+    line-height: 1.2;
   }
 
   .movie-card-score {
     font-weight: bold;
-    color: $primary-color; // O el color que prefieras
-    font-size: $font-size-base * 0.9;
-    margin-top: $spacing-unit / 2;
+    color: $primary-color;
+    font-size: $font-size-base * 0.85;
+    margin-top: auto; // Intenta empujar el puntaje hacia abajo si la tarjeta es flex column
+    padding-top: $spacing-unit / 3; // Espacio antes del puntaje
+  }
+
+  // Ocultar géneros y botón "Ver Detalles" si no los queremos en la tarjeta principal
+  .movie-card-genres {
+    display: none;
+  }
+  .movie-card .button { // Si usaras un botón con clase .button dentro de la card
+    display: none;
   }
 }
 
-// Los estilos para .movie-poster-large (en la página de show) pueden quedarse como estaban o ajustarse:
+// --- Estilos para el póster en la página de detalle (`movies/show.html.erb`) ---
 .movie-poster-large {
-  max-width: 300px; // O el tamaño que prefieras para la página de detalle
+  max-width: 300px;
   height: auto;
   margin-bottom: $spacing-unit * 1.5;
   border-radius: 4px;

@@ -1,0 +1,10 @@
+<%# app/views/movies/shared/_action_icon_watchlist.html.erb %>
+<% if current_user_is_in_watchlist?(movie) %>
+  <%= button_to movie_watchlist_entry_path(movie), method: :delete, class: "action-icon watchlist-true", title: "Quitar de Watchlist" do %>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0zM12 9v3m1.5-1.5H9" /></svg>
+  <% end %>
+<% else %>
+  <%= button_to movie_watchlist_entry_path(movie), method: :post, class: "action-icon watchlist-false", title: "Añadir a Watchlist" do %>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0zM12 9v6m3-3H9" /></svg>
+  <% end %>
+<% end %>

@@ -1,0 +1,10 @@
+<%# app/views/movies/shared/_action_icon_watched.html.erb %>
+<% if current_user_has_watched?(movie) %>
+  <%= button_to movie_watched_entry_path(movie), method: :delete, class: "action-icon watched-true", title: "Quitar de Vistas" do %>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" width="24" height="24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+  <% end %>
+<% else %>
+  <%= button_to movie_watched_entry_path(movie), method: :post, class: "action-icon watched-false", title: "Marcar como Vista" do %>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+  <% end %>
+<% end %>

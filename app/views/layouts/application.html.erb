@@ -19,18 +19,22 @@
           <li><%= link_to "Catálogo", movies_path %></li>
 
           <% if user_signed_in? %>
-            <li><%= link_to "Mi Dashboard", dashboard_path %></li>
-            <li><%= link_to "My Favorites", my_favorites_path %></li> <%# <--- LÍNEA ACTUALIZADA %>
+            <%# <li><%= link_to "Mi Dashboard", dashboard_path %></li> <%# Decide si mantener este %>
+            <li><%= link_to "My Favorites", my_favorites_path %></li>
+            <li><%= link_to "My Watched Movies", my_watched_movies_path %></li> <%# <--- NUEVO %>
+            <li><%= link_to "My Watchlist", my_watchlist_path %></li>         <%# <--- NUEVO %>
+
             <% if current_user.role == 'manager' %>
               <li><%= link_to "Admin Películas", admin_root_path %></li>
             <% end %>
-            <li><span class="nav-user-email">Hola, <%= current_user.email %></span></li>
+
+            <li style="margin-left: auto;"><span class="nav-user-email">Hola, <%= current_user.email %></span></li> <%# Empujado a la derecha %>
             <li><%= link_to "Editar Perfil", edit_user_registration_path %></li>
             <li>
               <%= button_to "Cerrar Sesión", destroy_user_session_path, method: :delete, class: "button-link-nav" %>
             </li>
           <% else %>
-            <li><%= link_to "Registrarse", new_user_registration_path %></li>
+            <li style="margin-left: auto;"><%= link_to "Registrarse", new_user_registration_path %></li> <%# Empujado a la derecha %>
             <li><%= link_to "Iniciar Sesión", new_user_session_path %></li>
           <% end %>
         </ul>

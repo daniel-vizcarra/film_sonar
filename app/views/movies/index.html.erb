@@ -1,37 +1,38 @@
 <%# app/views/movies/index.html.erb %>
 
-<%# --- Sección Top 10 Películas --- %>
-<% if @top_10_movies.any? %>
-  <div class="top-10-section">
-    <h2>Top 10 Películas FilmSonar</h2>
-    <div class="top-10-scroll-container">
-      <% @top_10_movies.each do |movie| %>
-        <div class="top-10-movie-card">
-          <%= link_to movie_path(movie) do %>
-            <% if movie.poster_url.present? %>
-              <%= image_tag movie.poster_url, alt: movie.title, class: "top-10-poster" %>
-            <% else %>
-              <div class="top-10-poster-placeholder movie-poster-thumbnail"> <%# Reutiliza estilo si quieres %>
-                <span><%= movie.title %></span>
-              </div>
-            <% end %>
-            <div class="top-10-info">
-              <p class="top-10-title"><%= movie.title %></p>
-              <% if movie.weighted_score.present? %>
-                <p class="top-10-score">Puntaje: <%= "%.1f" % movie.weighted_score %></p>
-              <% end %>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-  </div>
-<% end %>
-<%# --- Fin Sección Top 10 Películas --- %>
-<h1>Catálogo de Películas</h1>
-
 <%# --- Contenedor Principal para el Controlador Stimulus 'sidebar' --- %>
 <div data-controller="sidebar">
+
+  <%# --- Sección Top 10 Películas --- %>
+  <% if @top_10_movies.present? && @top_10_movies.any? %>
+    <div class="top-10-section">
+      <h2>Top 10 Películas FilmSonar</h2>
+      <div class="top-10-scroll-container">
+        <% @top_10_movies.each do |movie| %>
+          <div class="top-10-movie-card">
+            <%= link_to movie_path(movie) do %>
+              <% if movie.poster_url.present? %>
+                <%= image_tag movie.poster_url, alt: movie.title, class: "top-10-poster" %>
+              <% else %>
+                <div class="top-10-poster-placeholder movie-poster-thumbnail">
+                  <span><%= movie.title %></span>
+                </div>
+              <% end %>
+              <div class="top-10-info">
+                <p class="top-10-title"><%= movie.title %></p>
+                <% if movie.weighted_score.present? %>
+                  <p class="top-10-score">Puntaje: <%= "%.1f" % movie.weighted_score %></p>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <%# --- Fin Sección Top 10 Películas --- %>
+
+  <h1>Catálogo de Películas</h1>
 
   <%# --- Controles Principales: Botón de Filtro y Formulario de Ordenamiento --- %>
   <div class="catalog-controls" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 10px 0; border-bottom: 1px solid #eee;">
@@ -42,20 +43,16 @@
     </div>
     <div class="sort-controls">
       <%= form_with(url: movies_path, method: :get, local: true, data: { turbo_frame: "_top" }) do |form| %>
-        <%# Mantener filtros de género activos al ordenar %>
         <% if params[:genre_ids].present? %>
           <% Array(params[:genre_ids]).reject(&:blank?).each do |genre_id| %>
             <%= hidden_field_tag "genre_ids[]", genre_id %>
           <% end %>
         <% end %>
-
-        <%# Mantener filtros de director activos al ordenar %>
         <% if params[:director_ids].present? %>
           <% Array(params[:director_ids]).reject(&:blank?).each do |director_id| %>
             <%= hidden_field_tag "director_ids[]", director_id %>
           <% end %>
         <% end %>
-
         <%= form.label :sort_by, "Ordenar por:", style: "margin-right: 8px; font-weight: normal;" %>
         <%= form.select :sort_by,
                         options_for_select([
@@ -65,8 +62,8 @@
                           ["Título (Z-A)", "title_desc"],
                           ["Director (A-Z)", "director_asc"],
                           ["Director (Z-A)", "director_desc"],
-                          ["Mejor Puntaje FilmSonar", "score_desc"], 
-                          ["Peor Puntaje FilmSonar", "score_asc"]   
+                          ["Mejor Puntaje FilmSonar", "score_desc"],
+                          ["Peor Puntaje FilmSonar", "score_asc"]
                         ], params[:sort_by] || "release_year_desc"),
                         {},
                         { onchange: "this.form.submit();", class: "sort-select" } %>
@@ -74,19 +71,14 @@
     </div>
   </div>
 
-
-
   <%# --- Panel Lateral para Filtros (Sidebar) --- %>
   <div id="filter-sidebar" class="filter-sidebar" data-sidebar-target="panel">
-    <%# El formulario de filtros ahora envuelve el contenido del sidebar %>
     <%= form_with(url: movies_path, method: :get, local: true, data: { turbo_frame: "_top" }) do |form| %>
       <div class="filter-sidebar-header">
         <h3>Filtros</h3>
         <button type="button" class="close-sidebar-button" data-action="click->sidebar#close">&times;</button>
       </div>
-
       <div class="filter-sidebar-content">
-        <%# Filtros por Género %>
         <div class="filter-section">
           <h4>Géneros</h4>
           <div class="filter-options-grid genres-grid">
@@ -98,8 +90,6 @@
             <% end %>
           </div>
         </div>
-
-        <%# Filtros por Director %>
         <div class="filter-section" style="margin-top: 20px;">
           <h4>Directores</h4>
           <% if @directors.any? %>
@@ -116,16 +106,11 @@
           <% end %>
         </div>
       </div>
-
       <div class="filter-sidebar-actions">
-        <%# El botón Resetear es un link que quita los filtros pero mantiene el ordenamiento actual %>
-        <%# También debe incluir los parámetros de ordenamiento actual si existen %>
         <%= link_to "Resetear", movies_path(sort_by: params[:sort_by]), class: "button-secondary", data: { action: "click->sidebar#close" } %>
-        
-        <%# El botón Aplicar envía el formulario y luego cierra el sidebar (la acción de cerrar se puede manejar en el JS del form submit si es necesario o dejarla así) %>
         <%= form.submit "Aplicar Filtros", class: "button", style: "margin-left: 10px;", data: { action: "click->sidebar#close" } %>
       </div>
-    <% end %> <%# Fin del form_with del sidebar %>
+    <% end %>
   </div>
 
   <%# --- Overlay para el fondo del Sidebar --- %>
@@ -134,49 +119,45 @@
 </div> <%# --- Fin del Contenedor Principal data-controller="sidebar" --- %>
 
 
-
 <%# --- Mensaje de Filtros Activos --- %>
 <% if @active_filters_message.present? %>
   <p style="margin-top: 10px; font-style: italic;">Mostrando películas para: <strong><%= @active_filters_message %></strong></p>
 <% end %>
 
+<h2 style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">Todas las Películas</h2>
 
 <%# --- Lista de Películas --- %>
 <div class="movie-list">
   <% if @movies.any? %>
     <% @movies.each do |movie| %>
       <div class="movie-card">
-        <%= link_to movie_path(movie) do %>
+        <div class="movie-poster-container">
           <% if movie.poster_url.present? %>
             <%= image_tag movie.poster_url, alt: movie.title, class: "movie-poster-thumbnail" %>
           <% else %>
-            <div class="movie-poster-thumbnail"></div> <%# Placeholder si no hay imagen %>
+            <div class="movie-poster-thumbnail movie-poster-placeholder"><span><%= movie.title %></span></div>
           <% end %>
-          <h2><%= movie.title %> <span style="font-weight: normal; color: #6c757d;">(<%= movie.release_year %>)</span></h2>
-        <% end %>
-
-        <% if movie.director&.name.present? %>
-          <p class="movie-card-director"><strong>Dir:</strong> <%= movie.director.name %></p>
-        <% end %>
-
-        <%# Mostrar Puntaje Ponderado en la tarjeta %>
+          <% if user_signed_in? %>
+            <div class="movie-card-actions-overlay">
+              <%= render 'movies/shared/action_icon_watched', movie: movie %>
+              <%= render 'movies/shared/action_icon_liked', movie: movie %>
+              <%= render 'movies/shared/action_icon_watchlist', movie: movie %>
+            </div>
+          <% end %>
+        </div>
+        <div class="movie-card-content">
+          <%= link_to movie_path(movie) do %>
+            <h2><%= movie.title %> <span style="font-weight: normal; color: #6c757d;">(<%= movie.release_year %>)</span></h2>
+            <% if movie.director&.name.present? %>
+              <p class="movie-card-director"><strong>Dir:</strong> <%= movie.director.name %></p>
+            <% end %>
+          <% end %>
+        </div>
         <% if movie.weighted_score.present? %>
           <p class="movie-card-score">
             <strong>Puntaje:</strong> <%= "%.1f" % movie.weighted_score %>/100
           </p>
         <% end %>
-
-        <%# Botón de Favorito en la tarjeta %>
-        <% if user_signed_in? %>
-          <div class="favorite-action-card" style="margin-top: auto; padding-top: 10px; text-align: right;"> <%# 'margin-top: auto' intenta empujarlo hacia abajo %>
-            <% if current_user_has_favorited?(movie) %>
-              <%= button_to "❤️", movie_favorite_path(movie), method: :delete, class: "button-icon favorited", title: "Quitar de Favoritas" %>
-            <% else %>
-              <%= button_to "🤍", movie_favorite_path(movie), method: :post, class: "button-icon favorite", title: "Marcar como Favorita" %>
-            <% end %>
-          </div>
-        <% end %>
-        
       </div>
     <% end %>
   <% else %>

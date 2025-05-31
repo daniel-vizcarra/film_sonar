@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   end
 
   get '/my_favorites', to: 'users#my_favorites', as: 'my_favorites'
+  get '/my_watched_movies', to: 'users#watched_movies', as: 'my_watched_movies' 
+  get '/my_watchlist', to: 'users#watchlist_movies', as: 'my_watchlist'       
 
 
   namespace :admin do
