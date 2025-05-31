@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_31_203859) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_31_223851) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -31,6 +31,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_31_203859) do
     t.datetime "updated_at", null: false
     t.index ["movie_id", "source_name"], name: "index_external_ratings_on_movie_id_and_source_name", unique: true
     t.index ["movie_id"], name: "index_external_ratings_on_movie_id"
+  end
+
+  create_table "favorites", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "movie_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["movie_id"], name: "index_favorites_on_movie_id"
+    t.index ["user_id", "movie_id"], name: "index_favorites_on_user_id_and_movie_id", unique: true
+    t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
   create_table "genres", force: :cascade do |t|
@@ -71,6 +81,33 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_31_203859) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "watched_entries", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "movie_id", null: false
+    t.date "watched_on"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["movie_id"], name: "index_watched_entries_on_movie_id"
+    t.index ["user_id", "movie_id"], name: "index_watched_entries_on_user_id_and_movie_id", unique: true
+    t.index ["user_id"], name: "index_watched_entries_on_user_id"
+  end
+
+  create_table "watchlist_entries", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "movie_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["movie_id"], name: "index_watchlist_entries_on_movie_id"
+    t.index ["user_id", "movie_id"], name: "index_watchlist_entries_on_user_id_and_movie_id", unique: true
+    t.index ["user_id"], name: "index_watchlist_entries_on_user_id"
+  end
+
   add_foreign_key "external_ratings", "movies"
+  add_foreign_key "favorites", "movies"
+  add_foreign_key "favorites", "users"
   add_foreign_key "movies", "directors"
+  add_foreign_key "watched_entries", "movies"
+  add_foreign_key "watched_entries", "users"
+  add_foreign_key "watchlist_entries", "movies"
+  add_foreign_key "watchlist_entries", "users"
 end

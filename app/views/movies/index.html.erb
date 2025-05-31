@@ -1,4 +1,33 @@
 <%# app/views/movies/index.html.erb %>
+
+<%# --- Sección Top 10 Películas --- %>
+<% if @top_10_movies.any? %>
+  <div class="top-10-section">
+    <h2>Top 10 Películas FilmSonar</h2>
+    <div class="top-10-scroll-container">
+      <% @top_10_movies.each do |movie| %>
+        <div class="top-10-movie-card">
+          <%= link_to movie_path(movie) do %>
+            <% if movie.poster_url.present? %>
+              <%= image_tag movie.poster_url, alt: movie.title, class: "top-10-poster" %>
+            <% else %>
+              <div class="top-10-poster-placeholder movie-poster-thumbnail"> <%# Reutiliza estilo si quieres %>
+                <span><%= movie.title %></span>
+              </div>
+            <% end %>
+            <div class="top-10-info">
+              <p class="top-10-title"><%= movie.title %></p>
+              <% if movie.weighted_score.present? %>
+                <p class="top-10-score">Puntaje: <%= "%.1f" % movie.weighted_score %></p>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<%# --- Fin Sección Top 10 Películas --- %>
 <h1>Catálogo de Películas</h1>
 
 <%# --- Contenedor Principal para el Controlador Stimulus 'sidebar' --- %>
@@ -44,6 +73,8 @@
       <% end %>
     </div>
   </div>
+
+
 
   <%# --- Panel Lateral para Filtros (Sidebar) --- %>
   <div id="filter-sidebar" class="filter-sidebar" data-sidebar-target="panel">
@@ -103,6 +134,7 @@
 </div> <%# --- Fin del Contenedor Principal data-controller="sidebar" --- %>
 
 
+
 <%# --- Mensaje de Filtros Activos --- %>
 <% if @active_filters_message.present? %>
   <p style="margin-top: 10px; font-style: italic;">Mostrando películas para: <strong><%= @active_filters_message %></strong></p>
@@ -133,6 +165,18 @@
             <strong>Puntaje:</strong> <%= "%.1f" % movie.weighted_score %>/100
           </p>
         <% end %>
+
+        <%# Botón de Favorito en la tarjeta %>
+        <% if user_signed_in? %>
+          <div class="favorite-action-card" style="margin-top: auto; padding-top: 10px; text-align: right;"> <%# 'margin-top: auto' intenta empujarlo hacia abajo %>
+            <% if current_user_has_favorited?(movie) %>
+              <%= button_to "❤️", movie_favorite_path(movie), method: :delete, class: "button-icon favorited", title: "Quitar de Favoritas" %>
+            <% else %>
+              <%= button_to "🤍", movie_favorite_path(movie), method: :post, class: "button-icon favorite", title: "Marcar como Favorita" %>
+            <% end %>
+          </div>
+        <% end %>
+        
       </div>
     <% end %>
   <% else %>

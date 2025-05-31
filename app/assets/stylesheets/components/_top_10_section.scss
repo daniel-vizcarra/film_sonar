@@ -1,0 +1,93 @@
+// app/assets/stylesheets/components/_top_10_section.scss
+
+.top-10-section {
+    margin-bottom: $spacing-unit * 2;
+    padding-bottom: $spacing-unit;
+    // border-bottom: 1px solid #ddd; // Opcional: separador visual
+  
+    h2 {
+      font-size: $font-size-base * 1.5;
+      margin-bottom: $spacing-unit * 1.2;
+      text-align: center; // O left
+      color: $text-color;
+    }
+  }
+  
+  .top-10-scroll-container {
+    display: flex;
+    overflow-x: auto; // Habilita el scroll horizontal
+    padding-bottom: $spacing-unit; // Espacio para la barra de scroll si aparece
+  
+    // Estilo para la barra de scroll (opcional, varía por navegador)
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: darken($body-bg, 20%);
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background: darken($body-bg, 5%);
+    }
+  }
+  
+  .top-10-movie-card {
+    flex: 0 0 auto; // Evita que las tarjetas se encojan o crezcan
+    width: 160px;  // Ancho fijo para cada tarjeta del Top 10
+    margin-right: $spacing-unit * 1.2; // Espacio entre tarjetas
+    text-align: center;
+    border-radius: 4px;
+    // background-color: #fff; // Opcional: si quieres un fondo para la tarjeta
+    // box-shadow: 0 1px 3px rgba(0,0,0,0.1); // Opcional
+  
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+  
+  .top-10-poster {
+    width: 100%;
+    aspect-ratio: 2 / 3; // Mantenemos la proporción
+    object-fit: cover;
+    border-radius: 3px;
+    margin-bottom: $spacing-unit / 3;
+    background-color: $light-gray; // Placeholder
+  }
+  
+  .top-10-poster-placeholder { // Placeholder si no hay imagen
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    background-color: $light-gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $font-size-base * 0.8;
+    color: $secondary-color;
+    border-radius: 3px;
+    margin-bottom: $spacing-unit / 3;
+    padding: 5px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  
+  .top-10-info {
+    padding: 0 $spacing-unit / 4;
+  }
+  
+  .top-10-title {
+    font-size: $font-size-base * 0.85;
+    font-weight: 500;
+    color: $text-color;
+    margin-bottom: $spacing-unit / 4;
+    // Para truncar texto si es muy largo (opcional, requiere más CSS si es multilínea)
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .top-10-score {
+    font-size: $font-size-base * 0.8;
+    color: $primary-color; // O un color de "rating"
+    font-weight: bold;
+  }

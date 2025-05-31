@@ -36,3 +36,21 @@
       text-decoration: none;
     }
   }
+
+  .button-icon {
+    background: none;
+    border: none;
+    padding: 5px;
+    font-size: 1.5em; // Ajusta el tamaño del emoji/icono
+    line-height: 1;
+    cursor: pointer;
+    color: #6c757d; // Un gris por defecto
+  
+    &.favorited {
+      color: #e44d26; // Un color rojo/naranja para cuando es favorito
+    }
+  
+    &:hover {
+      opacity: 0.7;
+    }
+  }

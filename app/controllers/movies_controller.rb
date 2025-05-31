@@ -5,6 +5,10 @@ class MoviesController < ApplicationController
     @genres = Genre.all.order(:name)
     @directors = Director.all.order(:name)
 
+    @top_10_movies = Movie.where.not(weighted_score: nil) # Solo películas con puntaje
+                          .order(weighted_score: :desc)
+                          .limit(10)
+
     movies_query = Movie.all
 
     # Filtrar por Géneros seleccionados

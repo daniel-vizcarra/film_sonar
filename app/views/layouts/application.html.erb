@@ -20,9 +20,9 @@
 
           <% if user_signed_in? %>
             <li><%= link_to "Mi Dashboard", dashboard_path %></li>
-            <%# Mostrar enlace a Admin solo si el usuario es manager %>
+            <li><%= link_to "My Favorites", my_favorites_path %></li> <%# <--- LÍNEA ACTUALIZADA %>
             <% if current_user.role == 'manager' %>
-              <li><%= link_to "Admin Películas", admin_root_path %></li> <%# <--- ENLACE AÑADIDO %>
+              <li><%= link_to "Admin Películas", admin_root_path %></li>
             <% end %>
             <li><span class="nav-user-email">Hola, <%= current_user.email %></span></li>
             <li><%= link_to "Editar Perfil", edit_user_registration_path %></li>

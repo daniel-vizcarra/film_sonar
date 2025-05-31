@@ -3,6 +3,13 @@ class Movie < ApplicationRecord
   belongs_to :director, optional: true
   has_and_belongs_to_many :genres
   has_many :external_ratings, dependent: :destroy
+  has_many :favorites, dependent: :destroy
+  has_many :favoriting_users, through: :favorites, source: :user
+  has_many :watched_entries, dependent: :destroy
+  # has_many :watching_users, through: :watched_entries, source: :user # Opcional si necesitas esta info
+
+  has_many :watchlist_entries, dependent: :destroy
+  # has_many :users_with_movie_in_watchlist, through: :watchlist_entries, source: :user # Opcional
 
   accepts_nested_attributes_for :external_ratings,
                                 allow_destroy: true,

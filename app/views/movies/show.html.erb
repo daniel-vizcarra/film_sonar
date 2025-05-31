@@ -33,6 +33,23 @@
 <p><strong>Descripción:</strong></p>
 <p><%= simple_format(@movie.description) %></p> <%# simple_format ayuda a mantener saltos de línea %>
 
+<hr> <%# Separador opcional %>
+
+<% if user_signed_in? %>
+  <% if current_user_has_favorited?(@movie) %>
+    <%# Si ya es favorita, muestra el botón para quitarla %>
+    <%= button_to "⭐ Quitar de Favoritas", movie_favorite_path(@movie), method: :delete, class: "button-secondary" %>
+  <% else %>
+    <%# Si no es favorita, muestra el botón para añadirla %>
+    <%= button_to "☆ Marcar como Favorita", movie_favorite_path(@movie), method: :post, class: "button" %>
+  <% end %>
+<% else %>
+  <%# Si el usuario no ha iniciado sesión, invítalo a hacerlo %>
+  <p><%= link_to "Inicia sesión", new_user_session_path %> o <%= link_to "regrístrate", new_user_registration_path %> para marcar esta película como favorita.</p>
+<% end %>
+
+<hr>
+
 <hr>
 <%= link_to "Volver al Catálogo", movies_path %>
 
