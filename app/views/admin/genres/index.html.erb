@@ -1,0 +1,35 @@
+<%# app/views/admin/genres/index.html.erb %>
+<h1>Gestión de Géneros</h1>
+
+<p>
+  <%= link_to "Añadir Nuevo Género", new_admin_genre_path, class: "button" %>
+</p>
+
+<% if @genres.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Películas Asociadas</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @genres.each do |genre| %>
+        <tr>
+          <td><%= genre.name %></td>
+          <td><%= genre.movies.count %></td> <%# Muestra cuántas películas tienen este género %>
+          <td>
+            <%= link_to "Editar", edit_admin_genre_path(genre) %> |
+            <%= button_to "Eliminar", admin_genre_path(genre), method: :delete, data: { turbo_confirm: '¿Estás seguro? Solo se eliminará si no tiene películas asociadas.' }, class: "button-link-inline" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No hay géneros en la base de datos. ¡Añade el primero!</p>
+<% end %>
+<br>
+<%= link_to "Volver a Admin Películas", admin_movies_path %> |
+<%= link_to "Gestionar Directores", admin_directors_path %>

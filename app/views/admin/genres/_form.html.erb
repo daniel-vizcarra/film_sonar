@@ -1,0 +1,23 @@
+<%# app/views/admin/genres/_form.html.erb %>
+<%= form_with(model: [:admin, @genre], local: true) do |form| %>
+  <% if @genre.errors.any? %>
+    <div style="color: red;">
+      <h2><%= pluralize(@genre.errors.count, "error") %> impidieron guardar este género:</h2>
+      <ul>
+        <% @genre.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, "Nombre del Género" %><br>
+    <%= form.text_field :name %>
+  </div>
+
+  <br>
+  <div>
+    <%= form.submit "Guardar Género", class: "button" %>
+  </div>
+<% end %>

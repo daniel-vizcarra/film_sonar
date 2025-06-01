@@ -26,6 +26,13 @@ Rails.application.routes.draw do
 
 
   namespace :admin do
+    get "genres/index"
+    get "genres/show"
+    get "genres/new"
+    get "genres/create"
+    get "genres/edit"
+    get "genres/update"
+    get "genres/destroy"
     get "directors/index"
     get "directors/show"
     get "directors/new"
@@ -35,6 +42,7 @@ Rails.application.routes.draw do
     get "directors/destroy"
     resources :movies
     resources :directors
+    resources :genres
     root to: "movies#index"
   end
   # ... (ruta 'up' al final si está)
