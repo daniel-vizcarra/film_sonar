@@ -1,19 +1,20 @@
 #!/bin/bash -e
 
-# Enable jemalloc for reduced memory usage and latency.
+# Enable jemalloc ...
 if [ -z "${LD_PRELOAD+x}" ]; then
     LD_PRELOAD=$(find /usr/lib -name libjemalloc.so.2 -print -quit)
     export LD_PRELOAD
 fi
 
-# Remove a potentially pre-existing server.pid for Rails.
-# Asumimos que WORKDIR en tu Dockerfile es /rails
 rm -f /rails/tmp/pids/server.pid
 
-# Ejecutar la preparación de la base de datos en cada inicio
 echo "==> FilmSonar Entrypoint: Ejecutando rails db:prepare..."
-bundle exec rails db:prepare # Usamos bundle exec y lo hacemos incondicionalmente aquí
+bundle exec rails db:prepare
 echo "==> FilmSonar Entrypoint: rails db:prepare finalizado."
 
-# Luego ejecuta el comando principal del contenedor (el CMD del Dockerfile o el Start Command de Render)
+# Añadir ejecución explícita de db:seed
+echo "==> FilmSonar Entrypoint: Ejecutando rails db:seed..."
+bundle exec rails db:seed
+echo "==> FilmSonar Entrypoint: rails db:seed finalizado."
+
 exec "${@}"
