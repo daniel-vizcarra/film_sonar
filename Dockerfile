@@ -83,4 +83,4 @@ USER 1000:1000
 # Entrypoint and startup command
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 EXPOSE 80
-CMD ["./bin/thrust", "./bin/rails", "server"]
+CMD ["./bin/thrust", "./bin/rails", "db:seed", "&&", "./bin/rails", "server"]
