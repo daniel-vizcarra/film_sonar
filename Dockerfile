@@ -74,17 +74,14 @@ FROM base
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
-# Create and switch to non-root user for security
-RUN groupadd --system --gid 1000 rails && \
-    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
+# Mover estos comandos ANTES del USER 1000:1000
+RUN chmod +x bin/docker-entrypoint
+RUN ls -la bin/docker-entrypoint
+
+# Luego cambiar al usuario rails
 USER 1000:1000
 
-# Entrypoint and startup command
+# Entrypoint y startup command
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 EXPOSE 80
 CMD ["./bin/docker-entrypoint", "bundle", "exec", "puma", "-C", "config/puma.rb"]
-
-RUN chmod +x bin/docker-entrypoint
-
-RUN ls -la bin/docker-entrypoint
