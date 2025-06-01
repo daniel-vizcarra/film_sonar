@@ -85,5 +85,7 @@ USER 1000:1000
 # Exponer el puerto
 EXPOSE 80
 
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+
 # Comando de inicio que ejecuta las migraciones, seeds y el servidor
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
