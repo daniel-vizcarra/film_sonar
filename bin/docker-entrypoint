@@ -1,25 +1,27 @@
 #!/bin/bash -e
 
-# Enable jemalloc ... (mantén esta parte si la tienes)
+# Enable jemalloc ... (mantén esta parte)
 if [ -z "${LD_PRELOAD+x}" ]; then
     LD_PRELOAD=$(find /usr/lib -name libjemalloc.so.2 -print -quit)
     export LD_PRELOAD
 fi
 
-rm -f /rails/tmp/pids/server.pid # Limpia pids
+rm -f /rails/tmp/pids/server.pid
 
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 echo "!!!! ENTRYPOINT: INICIANDO RESET DE BASE DE DATOS (SOLO ESTA VEZ) !!!!"
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-bundle exec rails db:reset # Esto incluye drop, create, schema:load, y seed
+
+# Añade la variable de entorno ANTES del comando db:reset
+DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:reset 
+
 echo "==> ENTRYPOINT: db:reset (incluyendo seeds base) COMPLETADO."
 echo "==> IMPORTANTE: ¡REVIERTE este entrypoint para el próximo deploy!"
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 
-# OPCIONALMENTE, si quieres cargar TU CSV de películas INMEDIATAMENTE DESPUÉS del reset y seed base:
-# Si tu archivo movies.csv está en lib/data/ y la tarea Rake está lista.
+# OPCIONAL: Si quieres cargar tu CSV inmediatamente después del reset
 # echo "==> ENTRYPOINT: Ejecutando import:movies (desde CSV) DESPUÉS DEL RESET..."
-# bundle exec rails import:movies
+# DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails import:movies # También necesitaría la variable si la tarea Rake es "destructiva" o si db:reset no corre seeds correctamente
 # echo "==> ENTRYPOINT: import:movies finalizado."
 
 echo "==> ENTRYPOINT: Lanzando comando principal de la aplicación (${@})..."
