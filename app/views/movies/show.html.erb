@@ -1,55 +1,115 @@
 <%# app/views/movies/show.html.erb %>
-<h1><%= @movie.title %> (<%= @movie.release_year %>)</h1>
 
-<%= image_tag @movie.poster_url, alt: @movie.title, class: "movie-poster-large" if @movie.poster_url.present? %>
-<br>
-
-<p><strong>Director/a:</strong> <%= @movie.director&.name %></p>
-
-<% if @movie.genres.any? %>
-  <p><strong>Géneros:</strong> <%= @movie.genres.map(&:name).join(', ') %></p>
-<% end %>
-
-<%# Mostrar Puntaje Ponderado %>
-<% if @movie.weighted_score.present? %>
-  <p><strong>Puntaje FilmSonar:</strong> <span style="font-size: 1.2em; font-weight: bold;"><%= "%.1f" % @movie.weighted_score %></span>/100</p>
-<% end %>
-
-<%# Mostrar Calificaciones Externas Individuales %>
-<% if @movie.external_ratings.any? %>
-  <h4>Calificaciones Externas:</h4>
-  <ul>
-    <% @movie.external_ratings.order(:source_name).each do |rating| %>
-      <li>
-        <strong><%= rating.source_name %>:</strong> <%= rating.score %>
-        <% if rating.vote_count.present? %>
-          <small>(de <%= number_with_delimiter(rating.vote_count) %> votos)</small>
-        <% end %>
-      </li>
+<div class="movie-show-container">
+  <%# --- Columna Izquierda: Póster (sin cambios) --- %>
+  <div class="movie-show-poster-column">
+    <% if @movie.poster_url.present? %>
+      <%= image_tag @movie.poster_url, alt: @movie.title, class: "movie-poster-large-show-page" %>
+    <% else %>
+      <div class="movie-poster-large-show-page movie-poster-placeholder"><span><%= @movie.title %></span></div>
     <% end %>
-  </ul>
+  </div>
+
+  <%# --- Columna Derecha: Detalles (AHORA CON SUB-COLUMNAS INTERNAS) --- %>
+  <div class="movie-show-details-column"> <%# Este será el contenedor flex principal para las dos sub-columnas %>
+
+    <%# Sub-Columna Izquierda de Detalles (Información principal) %>
+    <div class="movie-details-main-content">
+      <h1><%= @movie.title %> <span class="release-year">(<%= @movie.release_year %>)</span></h1>
+
+      <% if @movie.director.present? %>
+        <p class="director-info">Dirigida por: <%= link_to @movie.director.name, "#" %></p> 
+      <% end %>
+
+      <% if @movie.description.present? %>
+        <div class="movie-synopsis">
+          <h4>Sinopsis</h4>
+          <%= simple_format(@movie.description) %>
+        </div>
+      <% end %>
+
+      <% if @movie.genres.any? %>
+        <div class="movie-genres-show">
+          <strong>Géneros:</strong> <%= @movie.genres.map(&:name).join(', ') %>
+        </div>
+      <% end %>
+    </div>
+
+    <%# Sub-Columna Derecha de Detalles (Calificaciones y Acciones) %>
+    <div class="movie-details-sidebar-info">
+      <%# Calificaciones Externas %>
+      <% if @movie.external_ratings.any? %>
+        <div class="external-ratings-section">
+          <% @movie.external_ratings.order(:source_name).each do |rating| %>
+            <div class="external-rating-item">
+              <% logo_filename = case rating.source_name
+                               when "IMDb" then "imdb.png"
+                               when "RottenTomatoes" then "rottentomatoes.png" # Verifica el nombre exacto de tu archivo
+                               when "Letterboxd" then "letterboxd.png"
+                               else nil
+                               end %>
+              <% if logo_filename.present? %>
+                <%= image_tag "logos/#{logo_filename}", alt: "#{rating.source_name} logo", class: "rating-source-logo-img" %>
+              <% else %>
+                <span class="rating-source-logo-text"><%= rating.source_name %></span>
+              <% end %>
+              <span class="rating-score"><%= rating.score %></span>
+              <%# Votos podrían ir aquí si hay espacio o en un tooltip %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <%# Puntaje FilmSonar %>
+      <% if @movie.weighted_score.present? %>
+        <div class="filmsonar-score-section">
+          <p class="filmsonar-score-value"><%= "%.1f" % @movie.weighted_score %><span>/100</span></p>
+          <p class="filmsonar-score-label">Puntaje FilmSonar</p>
+        </div>
+      <% end %>
+
+      <%# Iconos de Acción (Watched, Liked, Watchlist) %>
+      <% if user_signed_in? %>
+        <div class="movie-show-page-actions">
+          <%= render 'movies/shared/action_icon_watched', movie: @movie %>
+          <%= render 'movies/shared/action_icon_liked', movie: @movie %>
+          <%= render 'movies/shared/action_icon_watchlist', movie: @movie %>
+        </div>
+      <% end %>
+    </div>
+
+  </div> <%# Fin de .movie-show-details-column %>
+</div> <%# Fin de .movie-show-container %>
+
+<hr style="margin-top: 30px; margin-bottom: 30px;">
+
+<%# --- Sección de Películas Similares --- %>
+<% if @similar_movies.present? && @similar_movies.any? %>
+  <div class="similar-movies-section top-10-section"> <%# Reutilizamos clase .top-10-section para el estilo del título %>
+    <h3 style="margin-bottom: 20px; font-size: 1.6em; color: $text-color; text-align: left;">Películas Similares</h3>
+    <div class="top-10-scroll-container"> <%# Reutilizamos clase para el scroll horizontal %>
+      <% @similar_movies.each do |similar_movie| %>
+        <div class="top-10-movie-card"> <%# Reutilizamos el estilo de tarjeta del top 10 %>
+          <%= link_to movie_path(similar_movie) do %>
+            <% if similar_movie.poster_url.present? %>
+              <%= image_tag similar_movie.poster_url, alt: similar_movie.title, class: "top-10-poster" %>
+            <% else %>
+              <div class="top-10-poster-placeholder movie-poster-thumbnail">
+                <span><%= similar_movie.title %></span>
+              </div>
+            <% end %>
+            <div class="top-10-info">
+              <p class="top-10-title"><%= similar_movie.title %></p>
+              <% if similar_movie.weighted_score.present? %>
+                <p class="top-10-score">Puntaje: <%= "%.1f" % similar_movie.weighted_score %></p>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 <% end %>
+<%# --- Fin Sección de Películas Similares --- %>
 
-<p><strong>Descripción:</strong></p>
-<p><%= simple_format(@movie.description) %></p> <%# simple_format ayuda a mantener saltos de línea %>
-
-<hr> <%# Separador opcional %>
-
-<% if user_signed_in? %>
-  <% if current_user_has_favorited?(@movie) %>
-    <%# Si ya es favorita, muestra el botón para quitarla %>
-    <%= button_to "⭐ Quitar de Favoritas", movie_favorite_path(@movie), method: :delete, class: "button-secondary" %>
-  <% else %>
-    <%# Si no es favorita, muestra el botón para añadirla %>
-    <%= button_to "☆ Marcar como Favorita", movie_favorite_path(@movie), method: :post, class: "button" %>
-  <% end %>
-<% else %>
-  <%# Si el usuario no ha iniciado sesión, invítalo a hacerlo %>
-  <p><%= link_to "Inicia sesión", new_user_session_path %> o <%= link_to "regrístrate", new_user_registration_path %> para marcar esta película como favorita.</p>
-<% end %>
-
-<hr>
-
-<hr>
-<%= link_to "Volver al Catálogo", movies_path %>
-
+<%= link_to "Volver al Catálogo", movies_path, class: "button button-secondary" %>

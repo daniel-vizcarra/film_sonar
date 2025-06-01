@@ -1,0 +1,271 @@
+// app/assets/stylesheets/pages/_movie_show_page.scss
+
+// Contenedor principal de la página de detalle de la película
+.movie-show-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-unit * 2.5; // Espacio entre póster y columna de detalles
+    margin-top: $spacing-unit * 1.5;
+    margin-bottom: $spacing-unit * 2;
+  }
+  
+  // Columna del Póster (Izquierda)
+  .movie-show-poster-column {
+    flex: 0 0 300px; // Ancho fijo para el póster
+    // O podrías probar con:
+    // flex: 1;
+    // min-width: 280px;
+    // max-width: 340px; // Para que sea un poco más responsivo
+  
+    .movie-poster-large-show-page {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+  
+    .movie-poster-placeholder {
+      width: 100%; // Asegura que el placeholder tome el ancho
+      aspect-ratio: 2 / 3; // Mantiene la proporción
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: $light-gray;
+      color: $secondary-color;
+      text-align: center;
+      padding: $spacing-unit;
+      box-sizing: border-box;
+      border-radius: 8px;
+      span { font-size: $font-size-base * 1.1; font-weight: bold; }
+    }
+  }
+  
+  // Columna de Detalles (Derecha) - Es el contenedor flex para las dos sub-columnas internas
+  .movie-show-details-column {
+    flex: 1; // Ocupa el espacio restante
+    min-width: 320px; // Evita que se comprima demasiado, ajusta este valor
+    display: flex;
+    flex-wrap: nowrap; // Para que la info principal y la sidebar de ratings estén lado a lado
+    gap: $spacing-unit * 2;
+  }
+  
+  // Sub-Columna Izquierda de Detalles (Información Principal de la Película)
+  .movie-details-main-content {
+    flex: 1; // Permite que esta columna crezca para ocupar el espacio disponible
+    // min-width: 0; // A veces necesario en flexbox para que el contenido no desborde
+  
+    h1 {
+      font-size: $font-size-base * 2.4;
+      margin-bottom: $spacing-unit / 2; // Más espacio antes del director
+      line-height: 1.2;
+      color: $text-color;
+      .release-year {
+        font-size: $font-size-base * 1.6;
+        font-weight: 300;
+        color: $secondary-color;
+        margin-left: $spacing-unit / 2;
+      }
+    }
+  
+    .director-info {
+      font-size: $font-size-base * 1.1; // Un poco más pequeño
+      color: lighten($text-color, 25%);
+      margin-bottom: $spacing-unit * 2; // Más espacio
+      a {
+        color: $text-color; // Mismo color que el texto para un look más sutil
+        font-weight: 500;
+        text-decoration: underline;
+        &:hover { color: $primary-color; }
+      }
+    }
+  
+    .movie-synopsis {
+      margin-bottom: $spacing-unit * 1.5;
+      h4 {
+        font-size: $font-size-base * 1.05;
+        margin-bottom: $spacing-unit / 2; // Menos espacio antes del párrafo
+        color: $text-color;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+        // border-bottom: 1px solid #eee; // Opcional
+        // padding-bottom: $spacing-unit / 3;
+      }
+      p {
+        line-height: 1.6;
+        color: lighten($text-color, 15%);
+      }
+    }
+  
+    .movie-genres-show {
+      font-size: $font-size-base * 0.9;
+      margin-bottom: $spacing-unit;
+      color: $secondary-color;
+      strong { color: $text-color; }
+    }
+  }
+  
+  // Sub-Columna Derecha dentro de Detalles (Calificaciones y Acciones)
+  .movie-details-sidebar-info {
+    flex: 0 0 250px; // Mantenemos el ancho del contenedor
+    display: flex;
+    flex-direction: column;
+  
+    .external-ratings-section {
+      margin-bottom: $spacing-unit * 1.5;
+      
+      .external-rating-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: $spacing-unit * 0.75;
+        width: 100%;
+  
+        .rating-source-logo-img {
+          height: 40px;         // Aumentamos la altura a 22px
+          width: auto;          // Ancho automático
+          margin-right: 10px;
+          object-fit: contain;  // Asegura que se vea bien
+          max-width: 75px;      // Aumentamos el ancho máximo a 75px
+          display: inline-block;
+          vertical-align: middle;
+          flex-shrink: 0;       // Evita que el logo se encoja
+        }
+  
+        .rating-score {
+          margin-left: auto;    // Empuja el score hacia la derecha
+          font-size: $font-size-base * 1.1;
+          font-weight: bold;
+          color: $text-color;
+        }
+      }
+    }
+  
+    .filmsonar-score-section {
+      margin-bottom: $spacing-unit * 1.5; // Espacio después de este bloque
+      // text-align: center; // Si prefieres centrado
+  
+      .filmsonar-score-label {
+        font-size: $font-size-base * 0.8;
+        color: $secondary-color;
+        margin-bottom: $spacing-unit / 4;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 500;
+      }
+      .filmsonar-score-value {
+        font-size: $font-size-base * 2.5;
+        font-weight: bold;
+        color: $primary-color;
+        line-height: 1;
+        span {
+          font-size: $font-size-base * 1;
+          font-weight: normal;
+          color: $secondary-color;
+        }
+      }
+    }
+  
+    .movie-show-page-actions { // Para los iconos de Watch, Like, Watchlist
+      display: flex;
+      justify-content: space-around; // O 'space-between' o 'flex-start' con gap
+      // gap: $spacing-unit; // Si usas flex-start
+      margin-top: $spacing-unit; // Espacio antes de los iconos
+      padding-top: $spacing-unit;
+      border-top: 1px solid #eee; // Separador
+  
+      .action-icon {
+        background: none;
+        border: none;
+        padding: 5px;
+        cursor: pointer;
+        color: $secondary-color; // Color base para iconos inactivos
+  
+        svg {
+          width: 28px; // Tamaño de los iconos
+          height: 28px;
+          display: block;
+          transition: transform 0.2s ease, color 0.2s ease;
+        }
+  
+        &:hover {
+          color: $primary-color;
+          transform: scale(1.1);
+        }
+  
+        // Estados activos
+        &.watched-true { color: #28a745 !important; }
+        &.liked-true { color: #dc3545 !important; }
+        &.watchlist-true { color: #17a2b8 !important; }
+        
+        // Para los SVGs que usan currentColor
+        &.watched-true svg,
+        &.liked-true svg,
+        &.watchlist-true svg {
+          fill: currentColor; // El SVG se rellena con el color del botón
+          stroke: currentColor; // El borde del SVG también, si aplica
+          stroke-width: 1; // Puede que necesites ajustar esto para los SVGs llenos
+        }
+  
+        // Para los SVGs outline (estado no activo)
+        &.watched-false svg,
+        &.liked-false svg,
+        &.watchlist-false svg {
+          fill: none;
+          stroke: currentColor; // El stroke toma el color del botón
+        }
+      }
+    }
+  }
+  
+  // Media query para apilar en pantallas más pequeñas
+  @media (max-width: 820px) {
+    .movie-show-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .movie-show-poster-column {
+      width: 100%;
+      max-width: 300px; // Ajusta el máximo para el póster en móvil
+      margin: 0 auto $spacing-unit * 1.5 auto;
+    }
+  
+    .movie-show-details-column {
+      flex-direction: column;
+      gap: $spacing-unit * 1.5;
+      align-items: stretch; // Para que los hijos ocupen el ancho
+      text-align: left; // Restablece alineación
+  
+      .movie-details-main-content {
+        width: 100%;
+        h1, .director-info { text-align: center; } // Centrar título y director
+      }
+  
+      .movie-details-sidebar-info {
+        flex-basis: auto;
+        width: 100%;
+        max-width: none; // Que ocupe el ancho disponible
+        border-left: none;
+        padding-left: 0;
+        margin-top: $spacing-unit;
+        border-top: 1px solid #eee;
+        padding-top: $spacing-unit * 1.5;
+        align-items: stretch; // Que los elementos internos se estiren
+  
+        .external-ratings-section .external-rating-item,
+        .filmsonar-score-section,
+        .movie-show-page-actions {
+          justify-content: center; // Centra el contenido de estos bloques si son flex
+          text-align: center;
+        }
+        .external-ratings-section .external-rating-item {
+          // Para que el logo y el score no se separen demasiado si están centrados:
+          display: inline-flex; // O ajusta el width del contenedor del item si es necesario
+          width: auto; // Que se ajuste al contenido
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+    }
+  }
