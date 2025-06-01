@@ -86,4 +86,4 @@ USER 1000:1000
 EXPOSE 80
 
 # Comando de inicio que ejecuta las migraciones, seeds y el servidor
-CMD bundle exec rails db:migrate && bundle exec rails db:seed && bundle exec puma -C config/puma.rb
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
