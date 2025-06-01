@@ -1,21 +1,26 @@
 #!/bin/bash -e
 
-# Enable jemalloc ...
+# Enable jemalloc ... (mantén esta parte si la tienes)
 if [ -z "${LD_PRELOAD+x}" ]; then
     LD_PRELOAD=$(find /usr/lib -name libjemalloc.so.2 -print -quit)
     export LD_PRELOAD
 fi
 
-echo "==> FilmSonar Entrypoint: Cleaning up old server.pid..."
-rm -f /film_sonar/tmp/pids/server.pid # Asegúrate que la ruta sea correcta (tu WORKDIR es /rails)
+rm -f /rails/tmp/pids/server.pid # Limpia pids
 
-echo "==> FilmSonar Entrypoint: Running rails db:prepare..."
-bundle exec rails db:prepare
-echo "==> FilmSonar Entrypoint: rails db:prepare finished."
+echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+echo "!!!! ENTRYPOINT: INICIANDO RESET DE BASE DE DATOS (SOLO ESTA VEZ) !!!!"
+echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+bundle exec rails db:reset # Esto incluye drop, create, schema:load, y seed
+echo "==> ENTRYPOINT: db:reset (incluyendo seeds base) COMPLETADO."
+echo "==> IMPORTANTE: ¡REVIERTE este entrypoint para el próximo deploy!"
+echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 
-echo "==> FilmSonar Entrypoint: Running rails db:seed..."
-bundle exec rails db:seed
-echo "==> FilmSonar Entrypoint: rails db:seed finished."
+# OPCIONALMENTE, si quieres cargar TU CSV de películas INMEDIATAMENTE DESPUÉS del reset y seed base:
+# Si tu archivo movies.csv está en lib/data/ y la tarea Rake está lista.
+# echo "==> ENTRYPOINT: Ejecutando import:movies (desde CSV) DESPUÉS DEL RESET..."
+# bundle exec rails import:movies
+# echo "==> ENTRYPOINT: import:movies finalizado."
 
-echo "==> FilmSonar Entrypoint: Launching main command (${@})..."
+echo "==> ENTRYPOINT: Lanzando comando principal de la aplicación (${@})..."
 exec "${@}"

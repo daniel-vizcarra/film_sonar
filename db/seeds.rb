@@ -1,24 +1,25 @@
 # db/seeds.rb
 
-puts "----> Seeding Genres..."
+puts "----> Seeding Genres (English)..."
 
-# Lista de nombres de géneros comunes
-genres_to_seed = [
-  "Acción", "Aventura", "Animación", "Ciencia Ficción", "Comedia",
-  "Crimen", "Documental", "Drama", "Fantasía", "Histórico",
-  "Musical", "Misterio", "Romance", "Suspense", "Terror",
-  "Bélico", "Western"
+# Lista de nombres de géneros en inglés (basada en tu imagen)
+# Asegúrate de que estos nombres coincidan con lo que usarás en tu CSV
+english_genres_to_seed = [
+  "Action", "Adventure", "Animation", "Avant-garde", "Comedy",
+  "Crime", "Documentary", "Drama", "Fantasy", "Film Noir",
+  "History", "Horror", "Musical", "Romance", "Samurai",
+  "Science Fiction", "Shorts", "Silent", "Thriller", "War",
+  "Western"
+  # Añade más si es necesario
 ]
 
-# Usamos find_or_create_by! para evitar duplicados si corremos db:seed múltiples veces.
-# El bloque do |genre| solo se ejecuta si el género es nuevo.
-genres_to_seed.each do |genre_name|
+english_genres_to_seed.each do |genre_name|
   Genre.find_or_create_by!(name: genre_name) do |genre|
     puts "Creating Genre: #{genre.name}"
   end
 end
 
-puts "----> Finished seeding genres."
+puts "----> Finished seeding English genres."
 
 puts "\n----> Seeding Directors..."
 directors_to_seed = [
