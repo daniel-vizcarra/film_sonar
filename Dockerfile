@@ -83,4 +83,8 @@ USER 1000:1000
 # Entrypoint and startup command
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 EXPOSE 80
-CMD ["./bin/thrust", "./bin/rails", "db:seed", "&&", "./bin/rails", "server"]
+CMD ["./bin/docker-entrypoint", "bundle", "exec", "puma", "-C", "config/puma.rb"]
+
+RUN chmod +x bin/docker-entrypoint
+
+RUN ls -la bin/docker-entrypoint
