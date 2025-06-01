@@ -8,21 +8,12 @@ fi
 
 rm -f /rails/tmp/pids/server.pid
 
-echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-echo "!!!! ENTRYPOINT: INICIANDO RESET DE BASE DE DATOS (SOLO ESTA VEZ) !!!!"
-echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-
-# Añade la variable de entorno ANTES del comando db:reset
-DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:reset 
-
-echo "==> ENTRYPOINT: db:reset (incluyendo seeds base) COMPLETADO."
+#!/bin/bash -e
+# ... (jemalloc, rm pid) ...
+echo "!!!! ENTRYPOINT: RESET DE BASE DE DATOS (SOLO ESTA VEZ) !!!!"
+DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:reset
+echo "==> ENTRYPOINT: db:reset COMPLETADO."
 echo "==> IMPORTANTE: ¡REVIERTE este entrypoint para el próximo deploy!"
-echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-
-# OPCIONAL: Si quieres cargar tu CSV inmediatamente después del reset
-# echo "==> ENTRYPOINT: Ejecutando import:movies (desde CSV) DESPUÉS DEL RESET..."
-# DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails import:movies # También necesitaría la variable si la tarea Rake es "destructiva" o si db:reset no corre seeds correctamente
-# echo "==> ENTRYPOINT: import:movies finalizado."
-
-echo "==> ENTRYPOINT: Lanzando comando principal de la aplicación (${@})..."
-exec "${@}"
+# NO AÑADAS `exec "$@"` AQUÍ PARA ESTE SCRIPT DE RESET ÚNICO
+# Queremos que el contenedor termine después del reset para evitar que Puma intente arrancar con una BD inestable.
+exit 0 # Termina el script exitosamente
