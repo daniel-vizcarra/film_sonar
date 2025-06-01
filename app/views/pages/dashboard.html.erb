@@ -2,12 +2,12 @@
 
 <div class="recommendations-section" style="margin-top: 30px;">
   <h2>Recomendaciones Para Ti</h2>
+  <p style="font-style: italic; color: #555; margin-bottom: 20px;"><%= @recommendation_reasoning %></p>
 
   <% if @recommended_movies.present? && @recommended_movies.any? %>
-    <div class="movie-list"> <%# Reutilizamos la clase .movie-list para la cuadrícula %>
+    <div class="movie-list"> <%# Reutilizamos .movie-list %>
       <% @recommended_movies.each do |movie| %>
-        <%# Reutilizamos la estructura de .movie-card y los parciales de iconos de acción %>
-        <div class="movie-card">
+        <div class="movie-card"> <%# Reutilizamos .movie-card %>
           <div class="movie-poster-container">
             <% if movie.poster_url.present? %>
               <%= image_tag movie.poster_url, alt: movie.title, class: "movie-poster-thumbnail" %>
@@ -39,12 +39,12 @@
       <% end %>
     </div>
 
-    <%# Paginación para las recomendaciones %>
     <div class="pagy-nav-container" style="text-align: center; margin-top: 20px;">
       <%== pagy_nav(@pagy_recommendations) if @pagy_recommendations.present? && @pagy_recommendations.pages > 1 %>
     </div>
-  <% else %>
-    <p>Aún no tenemos suficientes datos para generar recomendaciones personalizadas para ti.</p>
-    <p>¡Empieza por marcar algunas <%= link_to "películas como favoritas", movies_path %>!</p>
+  <%# Mensaje si no hay recomendaciones pero sí había datos para intentar generarlas (ya cubierto por @recommendation_reasoning) %>
+  <% elsif source_movies_for_prefs.blank? && current_user.favorite_movies.none? %>
+    <%# Este bloque es si el usuario no tiene NINGUNA película marcada como favorita para basar las recomendaciones %>
+    <p>¡Empieza por marcar algunas <%= link_to "películas como favoritas", movies_path %> para que podamos descubrir qué te gusta!</p>
   <% end %>
 </div>
