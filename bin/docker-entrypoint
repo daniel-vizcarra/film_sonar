@@ -10,10 +10,17 @@ rm -f /rails/tmp/pids/server.pid
 
 #!/bin/bash -e
 # ... (jemalloc, rm pid) ...
-echo "!!!! ENTRYPOINT: RESET DE BASE DE DATOS (SOLO ESTA VEZ) !!!!"
-DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:reset
-echo "==> ENTRYPOINT: db:reset COMPLETADO."
-echo "==> IMPORTANTE: ¡REVIERTE este entrypoint para el próximo deploy!"
-# NO AÑADAS `exec "$@"` AQUÍ PARA ESTE SCRIPT DE RESET ÚNICO
-# Queremos que el contenedor termine después del reset para evitar que Puma intente arrancar con una BD inestable.
-exit 0 # Termina el script exitosamente
+echo "==> FilmSonar Entrypoint: Ejecutando rails db:prepare..."
+bundle exec rails db:prepare
+echo "==> FilmSonar Entrypoint: rails db:prepare finalizado."
+
+echo "==> FilmSonar Entrypoint: Ejecutando rails db:seed (datos base)..."
+bundle exec rails db:seed 
+echo "==> FilmSonar Entrypoint: rails db:seed (base data) finalizado."
+
+echo "==> FilmSonar Entrypoint: Ejecutando import:movies (desde CSV)..."
+bundle exec rails import:movies 
+echo "==> FilmSonar Entrypoint: import:movies finalizado."
+
+echo "==> FilmSonar Entrypoint: Launching main command (${@})..."
+exec "${@}"
