@@ -81,28 +81,24 @@ class MoviesController < ApplicationController
       genre_ids = @movie.genre_ids # IDs de los géneros de la película actual
 
       # Busca películas que:
-      # - Compartan al menos un género.
-      # - No sean la película actual.
-      # - Tengan un puntaje ponderado.
-      # - Ordenadas por puntaje descendente.
-      # - Limita el número de resultados.
+      # - Compartan al menos un género
+      # - No sean la película actual
+      # - Ordenadas aleatoriamente para tener variedad
       @similar_movies = Movie.joins(:genres)
-                              .where(genres: { id: genre_ids })
-                              .where.not(id: @movie.id)
-                              .where.not(weighted_score: nil)
-                              .order(weighted_score: :desc)
-                              .distinct
-                              .limit(6) # Puedes ajustar este límite (ej. 5 o 10)
+                            .where(genres: { id: genre_ids })
+                            .where.not(id: @movie.id)
+                            .select("DISTINCT ON (movies.id) movies.*, RANDOM() as random_order")
+                            .order("movies.id, random_order")
+                            .limit(6)
     end
 
     # Si no se encontraron películas por género o la película no tiene géneros,
-    # podríamos tener un fallback para mostrar algunas películas populares/recientes
-    # que no sean la actual.
+    # mostrar algunas películas aleatorias que no sean la actual
     if @similar_movies.empty? && Movie.where.not(id: @movie.id).count > 1
       @similar_movies = Movie.where.not(id: @movie.id)
-                              .where.not(weighted_score: nil)
-                              .order(weighted_score: :desc)
-                              .limit(6) # O un número diferente para el fallback
+                            .select("movies.*, RANDOM() as random_order")
+                            .order("random_order")
+                            .limit(6)
     end
     # --- Fin Lógica para Películas Similares ---
   end
