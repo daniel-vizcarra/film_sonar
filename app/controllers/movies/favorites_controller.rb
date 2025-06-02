@@ -1,20 +1,16 @@
-# app/controllers/movies/favorites_controller.rb
 class Movies::FavoritesController < ApplicationController
-  before_action :authenticate_user! # Asegura que el usuario haya iniciado sesión
-  before_action :set_movie          # Carga la película basada en params[:movie_id]
+  before_action :authenticate_user! 
+  before_action :set_movie         
 
   # POST /movies/:movie_id/favorite
   def create
     # Verificamos si el usuario ya tiene esta película como favorita
     if current_user.favorite_movies.include?(@movie)
-      # Si ya es favorita, redirigimos de vuelta con una alerta.
-      # 'redirect_back' intenta ir a la página anterior.
-      # 'fallback_location' se usa si no se puede determinar la página anterior.
+
       redirect_back fallback_location: movie_path(@movie), 
                     alert: 'Esta película ya está en tus favoritos.'
     else
-      # Si no es favorita, la añadimos a los favoritos del usuario.
-      # El 'create!' fallará ruidosamente si hay un error (ej. validación del modelo Favorite).
+
       current_user.favorites.create!(movie: @movie)
       redirect_back fallback_location: movie_path(@movie), 
                     notice: 'Película añadida a favoritos!'
@@ -40,7 +36,6 @@ class Movies::FavoritesController < ApplicationController
 
   private
 
-  # Método privado para cargar el objeto @movie
   def set_movie
     @movie = Movie.find(params[:movie_id])
   end

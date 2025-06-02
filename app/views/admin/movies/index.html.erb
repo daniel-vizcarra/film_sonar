@@ -7,13 +7,13 @@
   <span style="margin: 0 10px;">|</span>
   <%= link_to "Gestionar Directores", admin_directors_path, class: "button-secondary" %>
   <span style="margin: 0 10px;">|</span>
-  <%= link_to "Gestionar Géneros", admin_genres_path, class: "button-secondary" %> <%# <--- ENLACE AÑADIDO %>
+  <%= link_to "Gestionar Géneros", admin_genres_path, class: "button-secondary" %> 
 </p>
 <% if @movies.any? %>
   <table>
     <thead>
       <tr>
-        <th>Póster</th> <%# <--- NUEVA COLUMNA %>
+        <th>Póster</th> 
         <th>Título</th>
         <th>Año</th>
         <th>Director</th>
@@ -24,7 +24,6 @@
       <% @movies.each do |movie| %>
         <tr>
           <td>
-            <%# --- AÑADIR IMAGEN AQUÍ --- %>
             <% if movie.poster_url.present? %>
               <%= image_tag movie.poster_url, alt: movie.title, style: "width: 50px; height: auto; border-radius: 3px;" %>
             <% else %>
@@ -35,7 +34,7 @@
           <td><%= movie.release_year %></td>
           <td><%= movie.director&.name %></td>
 
-          <td> <%# <--- NUEVA CELDA %>
+          <td> 
             <% if movie.weighted_score.present? %>
               <%= "%.1f" % movie.weighted_score %>
             <% else %>

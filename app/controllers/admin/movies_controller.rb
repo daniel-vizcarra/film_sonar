@@ -1,8 +1,8 @@
 # app/controllers/admin/movies_controller.rb
 module Admin
     class MoviesController < ApplicationController
-      before_action :authenticate_user!   # Primero, asegúrate de que el usuario haya iniciado sesión
-      before_action :authorize_manager!   # Luego, usa nuestro helper para verificar si es manager
+      before_action :authenticate_user!   
+      before_action :authorize_manager!   
   
       # GET /admin/movies
       def index

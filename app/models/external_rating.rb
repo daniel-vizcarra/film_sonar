@@ -6,14 +6,13 @@ class ExternalRating < ApplicationRecord
   after_destroy :update_movie_weighted_score
 
   SOURCES = ["IMDb", "RottenTomatoes", "Letterboxd"].freeze
-  VOTE_CAP = 250000 # Nuestro tope de votos para la ponderación
+  VOTE_CAP = 250000 
 
   validates :source_name, presence: true, inclusion: { in: SOURCES, message: "fuente no válida. Usar: #{SOURCES.join(', ')}" }
   validates :score, presence: true
   validates :movie_id, uniqueness: { scope: :source_name, message: "ya tiene una calificación para esta fuente y película" }
   validates :vote_count, numericality: { only_integer: true, greater_than_or_equal_to: 0, allow_nil: true }
 
-  # Método para obtener el puntaje normalizado (0-100)
   def normalized_score
     return nil unless score.present?
 
@@ -30,7 +29,7 @@ class ExternalRating < ApplicationRecord
     when "Letterboxd" # Escala 0-5
       ((numeric_value / 5.0) * 100).round(2)
     else
-      nil # Fuente desconocida
+      nil 
     end
   end
 

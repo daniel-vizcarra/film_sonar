@@ -1,6 +1,3 @@
-<%# app/views/movies/index.html.erb %>
-
-<%# --- Contenedor Principal para el Controlador Stimulus 'sidebar' --- %>
 <div data-controller="sidebar">
 
   <%# --- Sección Top 10 Películas --- %>
@@ -30,11 +27,9 @@
       </div>
     </div>
   <% end %>
-  <%# --- Fin Sección Top 10 Películas --- %>
 
   <h1>Catálogo de Películas</h1>
 
-  <%# --- Controles Principales: Botón de Filtro y Formulario de Ordenamiento --- %>
   <div class="catalog-controls" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 10px 0; border-bottom: 1px solid #eee;">
     <div>
       <button type="button" class="button" data-action="click->sidebar#open">

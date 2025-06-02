@@ -2,7 +2,7 @@
 class ApplicationController < ActionController::Base
   include Pagy::Backend
 
-  protected # O private
+  protected 
 
   def authorize_manager!
     # Redirige al root si el usuario no está logueado O no es manager

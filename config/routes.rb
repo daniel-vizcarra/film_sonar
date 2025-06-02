@@ -1,4 +1,3 @@
-# config/routes.rb
 Rails.application.routes.draw do
   get "users/my_favorites"
   namespace :movies do
@@ -45,6 +44,5 @@ Rails.application.routes.draw do
     resources :genres
     root to: "movies#index"
   end
-  # ... (ruta 'up' al final si está)
   get "up" => "rails/health#show", as: :rails_health_check
 end

@@ -5,7 +5,7 @@ class MoviesController < ApplicationController
     @genres = Genre.all.order(:name)
     @directors = Director.all.order(:name)
 
-    @top_10_movies = Movie.where.not(weighted_score: nil) # Solo películas con puntaje
+    @top_10_movies = Movie.where.not(weighted_score: nil) 
                           .order(weighted_score: :desc)
                           .limit(10)
 
@@ -38,7 +38,6 @@ class MoviesController < ApplicationController
     # Aplicar Ordenamiento
     sort_option = params[:sort_by].presence || "release_year_desc"
     
-    # Modificamos la lógica de ordenamiento para manejar correctamente DISTINCT
     case sort_option
     when "release_year_desc"
       movies_query = movies_query.order(release_year: :desc, title: :asc)
@@ -66,24 +65,19 @@ class MoviesController < ApplicationController
       movies_query = movies_query.order(release_year: :desc, title: :asc)
     end
 
-    # Aplicamos DISTINCT después del ordenamiento
     movies_query = movies_query.distinct
 
-    @pagy, @movies = pagy(movies_query, items: 12)
+    @pagy, @movies = pagy(movies_query, items: 20)
   end
 
   def show
     @movie = Movie.find(params[:id])
 
-    # --- Lógica para Películas Similares ---
     @similar_movies = [] # Inicializa como array vacío
     if @movie.genres.any?
       genre_ids = @movie.genre_ids # IDs de los géneros de la película actual
 
-      # Busca películas que:
-      # - Compartan al menos un género
-      # - No sean la película actual
-      # - Ordenadas aleatoriamente para tener variedad
+
       @similar_movies = Movie.joins(:genres)
                             .where(genres: { id: genre_ids })
                             .where.not(id: @movie.id)
@@ -92,14 +86,11 @@ class MoviesController < ApplicationController
                             .limit(6)
     end
 
-    # Si no se encontraron películas por género o la película no tiene géneros,
-    # mostrar algunas películas aleatorias que no sean la actual
     if @similar_movies.empty? && Movie.where.not(id: @movie.id).count > 1
       @similar_movies = Movie.where.not(id: @movie.id)
                             .select("movies.*, RANDOM() as random_order")
                             .order("random_order")
                             .limit(6)
     end
-    # --- Fin Lógica para Películas Similares ---
   end
 end

@@ -1,7 +1,6 @@
 <%# app/views/movies/show.html.erb %>
 
 <div class="movie-show-container">
-  <%# --- Columna Izquierda: Póster (sin cambios) --- %>
   <div class="movie-show-poster-column">
     <% if @movie.poster_url.present? %>
       <%= image_tag @movie.poster_url, alt: @movie.title, class: "movie-poster-large-show-page" %>
@@ -10,10 +9,8 @@
     <% end %>
   </div>
 
-  <%# --- Columna Derecha: Detalles (AHORA CON SUB-COLUMNAS INTERNAS) --- %>
-  <div class="movie-show-details-column"> <%# Este será el contenedor flex principal para las dos sub-columnas %>
+  <div class="movie-show-details-column">
 
-    <%# Sub-Columna Izquierda de Detalles (Información principal) %>
     <div class="movie-details-main-content">
       <h1><%= @movie.title %> <span class="release-year">(<%= @movie.release_year %>)</span></h1>
 
@@ -43,11 +40,11 @@
           <% @movie.external_ratings.order(:source_name).each do |rating| %>
             <div class="external-rating-item">
               <% logo_filename = case rating.source_name
-                               when "IMDb" then "imdb.png"
-                               when "RottenTomatoes" then "rottentomatoes.png" # Verifica el nombre exacto de tu archivo
-                               when "Letterboxd" then "letterboxd.png"
-                               else nil
-                               end %>
+                              when "IMDb" then "imdb.png"
+                              when "RottenTomatoes" then "rottentomatoes.png" 
+                              when "Letterboxd" then "letterboxd.png"
+                              else nil
+                              end %>
               <% if logo_filename.present? %>
                 <%= image_tag "logos/#{logo_filename}", alt: "#{rating.source_name} logo", class: "rating-source-logo-img" %>
               <% else %>
