@@ -114,3 +114,6 @@ docker system prune
 docker-compose ps
 ```
 
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/daniel-vizcarra/film_sonar)
+
