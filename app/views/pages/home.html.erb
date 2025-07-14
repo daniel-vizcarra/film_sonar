@@ -1,2 +1,128 @@
-<h1>¡Bienvenido a FilmSonar!</h1>
-<p>Tu nueva plataforma para descubrir películas increíbles.</p>
+<!-- Hero Section -->
+<div class="hero-section">
+  <div class="hero-content">
+    <h1 class="hero-title">
+      <span class="highlight">FilmSonar</span>
+      <br>Descubre tu próxima película favorita
+    </h1>
+    <p class="hero-subtitle">
+      Plataforma inteligente de recomendaciones cinematográficas que aprende de tus gustos
+    </p>
+    <div class="hero-actions">
+      <% if user_signed_in? %>
+        <%= link_to "Ir al Dashboard", dashboard_path, class: "btn btn-primary btn-large" %>
+      <% else %>
+        <%= link_to "Comenzar", new_user_registration_path, class: "btn btn-primary btn-large" %>
+        <%= link_to "Iniciar Sesión", new_user_session_path, class: "btn btn-secondary btn-large" %>
+      <% end %>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="movie-grid">
+      <div class="movie-card featured">
+        <div class="movie-poster">
+          <i class="fas fa-film"></i>
+        </div>
+        <div class="movie-info">
+          <h3>Películas Personalizadas</h3>
+          <p>Basadas en tus preferencias</p>
+        </div>
+      </div>
+      <div class="movie-card">
+        <div class="movie-poster">
+          <i class="fas fa-star"></i>
+        </div>
+      </div>
+      <div class="movie-card">
+        <div class="movie-poster">
+          <i class="fas fa-heart"></i>
+        </div>
+      </div>
+      <div class="movie-card">
+        <div class="movie-poster">
+          <i class="fas fa-eye"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Features Section -->
+<section class="features-section">
+  <div class="container">
+    <h2 class="section-title">¿Por qué elegir FilmSonar?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-brain"></i>
+        </div>
+        <h3>Recomendaciones Inteligentes</h3>
+        <p>Nuestro algoritmo aprende de tus gustos para sugerir películas que realmente te gustarán.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-filter"></i>
+        </div>
+        <h3>Filtros Avanzados</h3>
+        <p>Encuentra películas por género, director, año y puntuación con filtros precisos.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-list"></i>
+        </div>
+        <h3>Listas Personalizadas</h3>
+        <p>Organiza tus películas en favoritos, vistas y watchlist para un seguimiento perfecto.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>Puntuaciones Confiables</h3>
+        <p>Integramos ratings de IMDb, Rotten Tomatoes y Letterboxd para evaluaciones precisas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number"><%= Movie.count %></div>
+        <div class="stat-label">Películas</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><%= Genre.count %></div>
+        <div class="stat-label">Géneros</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><%= Director.count %></div>
+        <div class="stat-label">Directores</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><%= User.count %></div>
+        <div class="stat-label">Usuarios</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="container">
+    <h2>¿Listo para descubrir tu próxima película favorita?</h2>
+    <p>Únete a nuestra comunidad de cinéfilos y comienza tu viaje cinematográfico personalizado.</p>
+    <div class="cta-actions">
+      <% if user_signed_in? %>
+        <%= link_to "Explorar Catálogo", movies_path, class: "btn btn-primary btn-large" %>
+      <% else %>
+        <%= link_to "Crear Cuenta Gratis", new_user_registration_path, class: "btn btn-primary btn-large" %>
+        <%= link_to "Ver Catálogo", movies_path, class: "btn btn-outline btn-large" %>
+      <% end %>
+    </div>
+  </div>
+</section>

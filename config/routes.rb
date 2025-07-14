@@ -45,4 +45,41 @@ Rails.application.routes.draw do
     root to: "movies#index"
   end
   get "up" => "rails/health#show", as: :rails_health_check
+
+  # API Routes
+  namespace :api do
+    namespace :v1 do
+      # Películas
+      resources :movies, only: [:index, :show] do
+        collection do
+          get :top
+        end
+        member do
+          get :similar
+        end
+      end
+
+      # Recomendaciones
+      get 'recommendations', to: 'recommendations#index'
+      get 'recommendations/explore', to: 'recommendations#explore'
+
+      # Acciones de usuario (requieren autenticación)
+      resources :movies, only: [] do
+        member do
+          post :favorite, to: 'user_actions#favorite'
+          delete :favorite, to: 'user_actions#unfavorite'
+          post :watched, to: 'user_actions#watched'
+          delete :watched, to: 'user_actions#unwatched'
+          post :watchlist, to: 'user_actions#watchlist'
+          delete :watchlist, to: 'user_actions#unwatchlist'
+        end
+      end
+
+      # Usuarios
+      get 'users/profile', to: 'users#profile'
+      get 'users/favorites', to: 'users#favorites'
+      get 'users/watched', to: 'users#watched'
+      get 'users/watchlist', to: 'users#watchlist'
+    end
+  end
 end
